@@ -3010,42 +3010,32 @@ textarea { border: 1px solid #B9B09B; border-radius: 10px; font-size: 1rem; }
 .aimsg { font-size: 1rem; }
 
 
-/* ---------- Komposer Pembuat Soal AI (Minimalis & Fokus UI/UX) ---------- */
+/* ---------- Komposer Pembuat Soal AI (Lega, Bersih, Tanpa Teks Berlebih) ---------- */
 .step-btn:disabled {
   opacity: 0.48;
   cursor: not-allowed;
 }
 
 .ai-shell {
-  max-width: 820px;
-  margin: 0 auto var(--sp-4);
-}
-
-.ai-header {
-  text-align: center;
-  margin-bottom: var(--sp-4);
+  max-width: 960px;
+  margin: var(--sp-6) auto var(--sp-5);
 }
 
 .ai-title {
+  text-align: center;
   font-family: 'Fraunces', Georgia, serif;
   text-transform: none;
-  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
-  margin: 0 0 var(--sp-1);
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  margin: 0 0 var(--sp-5);
   color: var(--ink);
-}
-
-.ai-subtitle {
-  margin: 0;
-  font-size: 0.95rem;
-  color: var(--ink-soft);
 }
 
 .ai-composer {
   background: #fff;
   border: 1.5px solid var(--line-strong);
-  border-radius: 16px;
+  border-radius: 20px;
   box-shadow: var(--sh-2);
-  overflow: hidden;
+  padding: var(--sp-5) var(--sp-6);
   transition: box-shadow 0.15s ease;
 }
 
@@ -3053,166 +3043,73 @@ textarea { border: 1px solid #B9B09B; border-radius: 10px; font-size: 1rem; }
   box-shadow: 0 0 0 3px var(--y), var(--sh-2);
 }
 
-/* Bilah pengaturan minimalis di bagian atas komposer */
-.ai-ctx-bar {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--sp-2) var(--sp-3);
-  padding: var(--sp-2) var(--sp-4);
-  background: #FAF6EE;
-  border-bottom: 1px solid var(--line);
-}
-
-.ai-field {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
-}
-
-.ai-field-grow {
-  flex: 1 1 auto;
-}
-
-.ai-field label {
-  margin: 0;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--ink-soft);
-  white-space: nowrap;
-}
-
-.ai-field select {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #fff;
-  padding: var(--sp-1) var(--sp-2);
-  font: inherit;
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: var(--ink);
-  cursor: pointer;
-  outline: none;
-  min-height: 32px;
-}
-
-.ai-field select:focus {
-  border-color: var(--ink);
-}
-
-.ai-sep {
-  width: 1px;
-  height: 20px;
-  background: var(--line);
-}
-
-/* Area ketik prompt utama */
-.ai-prompt-body {
-  padding: var(--sp-3) var(--sp-4);
-}
-
-.ai-prompt-body textarea {
+.ai-composer textarea {
   width: 100%;
   border: 0 !important;
   outline: 0;
   resize: none;
   background: transparent;
   font: inherit;
-  font-size: 1.08rem;
-  line-height: 1.5;
-  padding: var(--sp-1) 0;
+  font-size: 1.18rem;
+  line-height: 1.55;
+  padding: 0 0 var(--sp-3);
   color: var(--ink);
-  min-height: 64px;
+  min-height: 84px;
 }
 
-.ai-prompt-body textarea::placeholder {
+.ai-composer textarea::placeholder {
   color: #8C8577;
 }
 
-.ai-src-box {
-  margin-top: var(--sp-3);
-  padding-top: var(--sp-3);
-  border-top: 1px dashed var(--line);
-}
-
-.ai-src-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--sp-2);
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--ink-soft);
-}
-
-.ai-src-box textarea {
-  border: 1px solid var(--line) !important;
-  border-radius: 10px;
-  background: #FAF6EE;
-  padding: var(--sp-2) var(--sp-3);
-  font-size: 0.92rem;
-  min-height: 76px;
-}
-
-/* Bilah bawah komposer */
-.ai-footer-bar {
+.ai-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-3);
   flex-wrap: wrap;
-  padding: var(--sp-2) var(--sp-4) var(--sp-3);
-  border-top: 1px solid #F0EAE0;
+  padding-top: var(--sp-3);
+  border-top: 1px solid #EDE7D9;
 }
 
-.ai-footer-left {
+.ai-selects {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--sp-1);
-  font-size: 0.82rem;
-  color: var(--ink-soft);
+  gap: var(--sp-2);
 }
 
-.ai-link-btn,
-.ai-ex-link {
-  border: 0;
-  background: none;
-  padding: 2px 4px;
+.ai-selects select {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #FAF6EE;
+  padding: 8px 12px;
   font: inherit;
-  font-size: 0.82rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 2px;
   cursor: pointer;
+  outline: none;
+  min-height: 40px;
+  transition: border-color 0.12s ease, background 0.12s ease;
 }
 
-.ai-link-btn:hover,
-.ai-ex-link:hover {
-  color: var(--b);
-}
-
-.ai-ex-label {
-  color: var(--ink-soft);
-}
-
-.ai-dot {
-  color: var(--ink-soft);
-  margin: 0 2px;
+.ai-selects select:hover,
+.ai-selects select:focus {
+  border-color: var(--ink);
+  background: #fff;
 }
 
 .ai-submit-btn {
+  margin-left: auto;
   background: var(--y);
   border: 1.5px solid var(--ink);
-  border-radius: 10px;
-  padding: var(--sp-2) var(--sp-5);
-  min-height: 40px;
+  border-radius: 12px;
+  padding: 10px 24px;
+  min-height: 42px;
   font-weight: 800;
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--ink);
+  white-space: nowrap;
   transition: background 0.12s ease, transform 0.08s ease;
 }
 
@@ -3229,14 +3126,14 @@ textarea { border: 1px solid #B9B09B; border-radius: 10px; font-size: 1rem; }
 .ai-status-note {
   margin-top: var(--sp-3);
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--ink-soft);
 }
 
 .ai-shell .aimsg {
   margin-top: var(--sp-3);
-  font-size: 0.92rem;
+  font-size: 0.95rem;
 }
 
 .ai-shell .aimsg.ok {
@@ -3249,13 +3146,13 @@ textarea { border: 1px solid #B9B09B; border-radius: 10px; font-size: 1rem; }
 
 /* Banner lanjut langkah 2 (hanya muncul setelah soal selesai dibuat/dipilih) */
 .ai-ready-bar {
-  max-width: 820px;
+  max-width: 960px;
   margin: 0 auto var(--sp-5);
 }
 
 /* Riwayat paket soal tersimpan yang ringkas */
 .ai-saved-section {
-  max-width: 820px;
+  max-width: 960px;
   margin: var(--sp-4) auto 0;
 }
 
@@ -3270,7 +3167,7 @@ textarea { border: 1px solid #B9B09B; border-radius: 10px; font-size: 1rem; }
 
 .ai-saved-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: var(--sp-2);
 }
 
@@ -3279,10 +3176,10 @@ textarea { border: 1px solid #B9B09B; border-radius: 10px; font-size: 1rem; }
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-2);
-  padding: var(--sp-2) var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 12px;
   text-align: left;
   transition: border-color 0.12s ease, background 0.12s ease;
 }
@@ -3304,20 +3201,20 @@ textarea { border: 1px solid #B9B09B; border-radius: 10px; font-size: 1rem; }
 }
 
 .saved-item-main b {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .saved-meta {
-  font-size: 0.76rem;
+  font-size: 0.8rem;
   color: var(--ink-soft);
   font-weight: 500;
 }
 
 .saved-pick {
-  font-size: 0.76rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: var(--ink-soft);
   white-space: nowrap;
@@ -3328,9 +3225,8 @@ textarea { border: 1px solid #B9B09B; border-radius: 10px; font-size: 1rem; }
 }
 
 @media (max-width: 680px) {
-  .ai-sep { display: none; }
-  .ai-ctx-bar { gap: var(--sp-2); }
-  .ai-field { flex: 1 1 calc(50% - 8px); justify-content: space-between; }
-  .ai-field select { flex: 1; }
+  .ai-composer { padding: var(--sp-4); }
+  .ai-selects { width: 100%; }
+  .ai-selects select { flex: 1 1 calc(50% - 8px); }
   .ai-submit-btn { width: 100%; }
 }
