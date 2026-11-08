@@ -54,7 +54,7 @@ const QTYPES = [
 const S = {
   view: 'landing',
   step: 1,
-  pkg: BANK.length ? BANK[0].id : null,
+  pkg: null,
   n1: 'Tim Biru',
   n2: 'Tim Merah',
   theme: 'rocket',
@@ -520,16 +520,17 @@ const pcard = (b, i) =>
 function renderStepper() {
   const p = pkg();
   const steps = [
-    [1, '1. Buat Soal', p ? `${p.name} (${p.qs.length} soal)` : 'Belum ada soal'],
+    [1, '1. Buat Soal', p ? `${p.name} (${p.qs.length} soal)` : 'Ketik topik soal'],
     [2, '2. Bentuk Soal', qtypeObj()[2]],
     [3, '3. Mode & Skor', `${mode()[2]} · ${S.time} dtk`],
     [4, '4. Tim & Arena', `${TN[S.theme]} · ${S.n1} vs ${S.n2}`]
   ];
   return `<nav class='stepper' aria-label='Langkah pengaturan lomba'>
     ${steps.map(([num, title, sub]) => {
+      const locked = num > 1 && !p;
       const cls = S.step === num ? 'on' : S.step > num ? 'done' : '';
       const badge = S.step > num ? '✓' : num;
-      return `<button type='button' class='step-btn ${cls}' onclick='goStep(${num})'>
+      return `<button type='button' class='step-btn ${cls}' ${locked ? 'disabled' : ''} onclick='goStep(${num})'>
         <span class='step-num'>${badge}</span>
         <span class='step-info'><b>${title}</b><small>${esc(sub)}</small></span>
       </button>`;
@@ -719,32 +720,44 @@ function setup() {
 
 function setup1() {
   const p = pkg();
-  const mine = BANK.map((b, i) => pcard(b, i)).join('');
+  const mine = BANK.map((b, i) =>
+    `<button type='button' class='saved-item ${b.id === S.pkg ? 'on' : ''}' onclick='pickPkg(${i})'>
+      <div class='saved-item-main'>
+        <b>${b.name}</b>
+        <span class='saved-meta'>${esc(b.meta || 'Sekolah')} · ${b.qs.length} soal</span>
+      </div>
+      <span class='saved-pick'>${b.id === S.pkg ? '✓ Terpilih' : 'Pilih'}</span>
+    </button>`
+  ).join('');
 
   return head(`${fullBtnHtml()}<button class='btn w' onclick='gL()'>Beranda</button>`) +
     `<div class='wrap'>
       ${renderStepper()}
       ${aiPanel2()}
-      ${mine ? `<h3 style='margin:0 0 12px'>Paket Soal Tersimpan</h3><div class='pk4' style='margin-bottom:24px'>${mine}</div>` : ''}
-      <div class='selbar'>
+      ${p ? `
+      <div class='selbar ai-ready-bar'>
         <div class='selbar-left'>
-          ${p ? `
           <div>
             <span class='tag' style='background:var(--y);margin-right:6px'>${p.meta}</span>
-            <b>${p.name}</b> <span style='font-weight:700;color:#4B5563'>(${p.qs.length} soal)</span>
+            <b>${p.name}</b> <span style='font-weight:700;color:#4B5563'>(${p.qs.length} soal siap dimainkan)</span>
           </div>
           <details>
-            <summary style='cursor:pointer;font-size:0.88rem;font-weight:700'>Lihat daftar soal &amp; kunci</summary>
+            <summary style='cursor:pointer;font-size:0.88rem;font-weight:700'>Lihat daftar soal &amp; kunci jawaban</summary>
             <ol style='font-size:0.85rem;margin:6px 0'>
               ${p.qs.map(q => `<li>${q[0]} — <b>Kunci: ${'ABCD'[q[2]]}. ${q[1][q[2]]}</b></li>`).join('')}
             </ol>
-          </details>` : `<div style='font-weight:700'>Belum ada soal. Buat soal dengan AI di atas untuk melanjutkan.</div>`}
+          </details>
         </div>
         <div class='selbar-actions'>
-          ${p ? `<button class='btn w' onclick='aiDel()'>Hapus Paket</button>` : ''}
-          <button class='btn big' ${p ? '' : 'disabled'} onclick='S.step=2;render()'>Lanjut ke Langkah 2</button>
+          <button class='btn w' onclick='aiDel()'>Hapus Paket</button>
+          <button class='btn big' onclick='S.step=2;render()'>Lanjut ke Langkah 2</button>
         </div>
-      </div>
+      </div>` : ''}
+      ${mine ? `
+      <div class='ai-saved-section'>
+        <div class='ai-saved-title'>Riwayat Paket Soal Tersimpan</div>
+        <div class='ai-saved-list'>${mine}</div>
+      </div>` : ''}
     </div>`;
 }
 

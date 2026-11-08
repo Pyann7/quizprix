@@ -3010,149 +3010,327 @@ textarea { border: 1px solid #B9B09B; border-radius: 10px; font-size: 1rem; }
 .aimsg { font-size: 1rem; }
 
 
-/* ---------- Kotak chat pembuat soal ---------- */
-.chatbox {
-  max-width: 780px;
-  margin: var(--sp-6) auto var(--sp-8);
-  text-align: center;
+/* ---------- Komposer Pembuat Soal AI (Minimalis & Fokus UI/UX) ---------- */
+.step-btn:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
 }
-.chat-title {
+
+.ai-shell {
+  max-width: 820px;
+  margin: 0 auto var(--sp-4);
+}
+
+.ai-header {
+  text-align: center;
+  margin-bottom: var(--sp-4);
+}
+
+.ai-title {
   font-family: 'Fraunces', Georgia, serif;
   text-transform: none;
-  font-size: clamp(1.5rem, 3vw, 2.15rem);
-  margin: 0 0 var(--sp-2);
+  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+  margin: 0 0 var(--sp-1);
+  color: var(--ink);
 }
-.chat-sub {
-  margin: 0 0 var(--sp-5);
+
+.ai-subtitle {
+  margin: 0;
+  font-size: 0.95rem;
   color: var(--ink-soft);
-  font-size: 1rem;
 }
-.chat-input {
+
+.ai-composer {
   background: #fff;
   border: 1.5px solid var(--line-strong);
-  border-radius: 20px;
+  border-radius: 16px;
   box-shadow: var(--sh-2);
-  padding: var(--sp-4);
-  text-align: left;
+  overflow: hidden;
   transition: box-shadow 0.15s ease;
 }
-.chat-input:focus-within {
+
+.ai-composer:focus-within {
   box-shadow: 0 0 0 3px var(--y), var(--sh-2);
 }
-.chat-input textarea {
+
+/* Bilah pengaturan minimalis di bagian atas komposer */
+.ai-ctx-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-3);
+  padding: var(--sp-2) var(--sp-4);
+  background: #FAF6EE;
+  border-bottom: 1px solid var(--line);
+}
+
+.ai-field {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.ai-field-grow {
+  flex: 1 1 auto;
+}
+
+.ai-field label {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.ai-field select {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: var(--sp-1) var(--sp-2);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  outline: none;
+  min-height: 32px;
+}
+
+.ai-field select:focus {
+  border-color: var(--ink);
+}
+
+.ai-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--line);
+}
+
+/* Area ketik prompt utama */
+.ai-prompt-body {
+  padding: var(--sp-3) var(--sp-4);
+}
+
+.ai-prompt-body textarea {
   width: 100%;
-  border: 0;
+  border: 0 !important;
   outline: 0;
   resize: none;
   background: transparent;
   font: inherit;
-  font-size: 1.15rem;
+  font-size: 1.08rem;
   line-height: 1.5;
-  padding: var(--sp-1) var(--sp-2) var(--sp-3);
+  padding: var(--sp-1) 0;
   color: var(--ink);
+  min-height: 64px;
 }
-.chat-input textarea::placeholder {
+
+.ai-prompt-body textarea::placeholder {
   color: #8C8577;
 }
-.chat-bar {
+
+.ai-src-box {
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px dashed var(--line);
+}
+
+.ai-src-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-2);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.ai-src-box textarea {
+  border: 1px solid var(--line) !important;
+  border-radius: 10px;
+  background: #FAF6EE;
+  padding: var(--sp-2) var(--sp-3);
+  font-size: 0.92rem;
+  min-height: 76px;
+}
+
+/* Bilah bawah komposer */
+.ai-footer-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-3);
   flex-wrap: wrap;
-  padding-top: var(--sp-3);
-  border-top: 1px solid #EDE7D9;
+  padding: var(--sp-2) var(--sp-4) var(--sp-3);
+  border-top: 1px solid #F0EAE0;
 }
-.chat-opts {
+
+.ai-footer-left {
   display: flex;
-  gap: var(--sp-2);
+  align-items: center;
   flex-wrap: wrap;
-  align-items: center;
-}
-.chip-sel {
-  display: inline-flex;
-  align-items: center;
   gap: var(--sp-1);
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: var(--sp-1) var(--sp-3);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--ink-soft);
 }
-.chip-sel select {
+
+.ai-link-btn,
+.ai-ex-link {
   border: 0;
-  background: transparent;
+  background: none;
+  padding: 2px 4px;
   font: inherit;
+  font-size: 0.82rem;
   font-weight: 700;
   color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
   cursor: pointer;
-  outline: 0;
-  padding: var(--sp-1) 0;
 }
-.chat-send {
+
+.ai-link-btn:hover,
+.ai-ex-link:hover {
+  color: var(--b);
+}
+
+.ai-ex-label {
+  color: var(--ink-soft);
+}
+
+.ai-dot {
+  color: var(--ink-soft);
+  margin: 0 2px;
+}
+
+.ai-submit-btn {
   background: var(--y);
   border: 1.5px solid var(--ink);
-  border-radius: 999px;
+  border-radius: 10px;
   padding: var(--sp-2) var(--sp-5);
-  min-height: 44px;
+  min-height: 40px;
   font-weight: 800;
-  font-size: 0.98rem;
-  box-shadow: none;
+  font-size: 0.95rem;
+  color: var(--ink);
   transition: background 0.12s ease, transform 0.08s ease;
 }
-.chat-send:hover:not(:disabled) {
+
+.ai-submit-btn:hover:not(:disabled) {
   background: #F5C428;
   transform: translateY(-1px);
 }
-.chat-send:disabled {
+
+.ai-submit-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-.prompt-examples {
+
+.ai-status-note {
+  margin-top: var(--sp-3);
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.ai-shell .aimsg {
+  margin-top: var(--sp-3);
+  font-size: 0.92rem;
+}
+
+.ai-shell .aimsg.ok {
+  background: #D1FAE5;
+}
+
+.ai-shell .aimsg.err {
+  background: #FEE2E2;
+}
+
+/* Banner lanjut langkah 2 (hanya muncul setelah soal selesai dibuat/dipilih) */
+.ai-ready-bar {
+  max-width: 820px;
+  margin: 0 auto var(--sp-5);
+}
+
+/* Riwayat paket soal tersimpan yang ringkas */
+.ai-saved-section {
+  max-width: 820px;
+  margin: var(--sp-4) auto 0;
+}
+
+.ai-saved-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  margin-bottom: var(--sp-2);
+}
+
+.ai-saved-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--sp-2);
+}
+
+.saved-item {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
+  justify-content: space-between;
   gap: var(--sp-2);
-  margin-top: var(--sp-3);
-  font-size: 0.85rem;
-  color: var(--ink-soft);
-}
-.prompt-chip {
+  padding: var(--sp-2) var(--sp-3);
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: var(--sp-1) var(--sp-3);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--ink);
-  transition: background 0.12s ease, border-color 0.12s ease;
+  border-radius: 10px;
+  text-align: left;
+  transition: border-color 0.12s ease, background 0.12s ease;
 }
-.prompt-chip:hover {
-  background: var(--y);
+
+.saved-item:hover {
   border-color: var(--ink);
 }
-.chat-hint {
-  margin: var(--sp-3) 0 0;
-  font-size: 0.92rem;
-  font-weight: 600;
+
+.saved-item.on {
+  background: #FFFBEB;
+  border: 1.5px solid var(--ink);
+}
+
+.saved-item-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.saved-item-main b {
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.saved-meta {
+  font-size: 0.76rem;
   color: var(--ink-soft);
+  font-weight: 500;
 }
-.chat-src {
-  width: 100%;
-  font: inherit;
-  padding: var(--sp-3);
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  margin-top: var(--sp-2);
+
+.saved-pick {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  white-space: nowrap;
 }
-.chatbox .ai-more {
-  text-align: left;
-  margin-top: var(--sp-4);
+
+.saved-item.on .saved-pick {
+  color: var(--ink);
 }
-.chatbox .aimsg {
-  margin-top: var(--sp-4);
-  text-align: left;
+
+@media (max-width: 680px) {
+  .ai-sep { display: none; }
+  .ai-ctx-bar { gap: var(--sp-2); }
+  .ai-field { flex: 1 1 calc(50% - 8px); justify-content: space-between; }
+  .ai-field select { flex: 1; }
+  .ai-submit-btn { width: 100%; }
 }

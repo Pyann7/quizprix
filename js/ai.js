@@ -3,8 +3,11 @@
  * Pembuatan soal dilakukan di server (/api/generate) sehingga API key tidak pernah ada di browser.
  * Server memakai Google AI Studio dan Groq Cloud secara bergantian (failover otomatis).
  *
- * Antarmuka bergaya kotak prompt (seperti ChatGPT / Claude / Gemini):
- * Guru langsung mengetik topik soal di kotak utama, dengan pengaturan ringkas di bagian bawah kotak.
+ * Desain UI/UX:
+ * - Satu kartu komposer terpadu (tanpa tumpukan tombol).
+ * - Bilah konteks minimalis di bagian atas kartu (Jenjang, Kelas, Mapel, Jumlah, Tingkat).
+ * - Area ketik topik yang fokus dan ringkas di tengah.
+ * - Bilah aksi di bawah dengan lampiran teks opsional & tombol utama "Buat Soal".
  */
 
 const DIFF = ['mudah', 'sedang', 'sulit'];
@@ -18,11 +21,11 @@ const MAPEL_BY_JENJANG = {
   sma: ['Matematika', 'Fisika', 'Kimia', 'Biologi', 'Ekonomi', 'Sejarah', 'Geografi', 'Sosiologi', 'Bahasa Indonesia', 'Bahasa Inggris', 'Informatika']
 };
 
-// Contoh topik cepat per jenjang agar guru langsung paham apa yang perlu diketik
+// Contoh topik singkat per jenjang
 const CONTOH_TOPIK = {
-  sd: ['Pecahan senilai dan campuran', 'Siklus air dan perubahan wujud benda', 'Pancasila dan lambang negara'],
-  smp: ['Sistem pencernaan manusia', 'Teorema Pythagoras', 'Teks prosedur dan ciri kebahasaannya'],
-  sma: ['Hukum Newton tentang gerak', 'Ikatan kimia dan struktur atom', 'Permintaan, penawaran, dan keseimbangan pasar']
+  sd: ['Pecahan senilai', 'Siklus air', 'Pancasila & lambangnya'],
+  smp: ['Sistem pencernaan manusia', 'Teorema Pythagoras', 'Teks prosedur'],
+  sma: ['Hukum Newton', 'Ikatan kimia', 'Permintaan & penawaran']
 };
 
 // String sanitizers for secure HTML injection
@@ -41,6 +44,7 @@ function initAIState(state) {
     n: 10,
     diff: 'sedang',
     src: '',
+    showSrc: false,
     busy: false,
     msg: '',
     ok: false
@@ -63,6 +67,15 @@ function setJenjang(id) {
   render();
 }
 
+function toggleAiSrc() {
+  S.ai.showSrc = !S.ai.showSrc;
+  render();
+  if (S.ai.showSrc) {
+    const el = document.getElementById('as');
+    if (el) el.focus();
+  }
+}
+
 function pickContohTopik(t) {
   S.ai.topic = t;
   render();
@@ -73,7 +86,7 @@ function pickContohTopik(t) {
 function aiDel() {
   const k = BANK.findIndex(b => b.id === S.pkg);
   if (k >= 0) BANK.splice(k, 1);
-  S.pkg = BANK.length ? BANK[0].id : null;
+  S.pkg = null;
   saveAI();
   render();
 }
@@ -86,7 +99,7 @@ async function aiGen() {
   if (a.busy) return;
 
   if (!a.topic.trim()) {
-    a.msg = 'Ketik topik soal terlebih dahulu di kotak di atas, contoh: Sistem pencernaan manusia.';
+    a.msg = 'Ketik topik soal terlebih dahulu di kotak di atas.';
     a.ok = false;
     render();
     const el = document.getElementById('at');
@@ -149,7 +162,7 @@ async function aiGen() {
     S.pkg = id;
     saveAI();
     a.ok = true;
-    a.msg = `Berhasil! ${qs.length} soal "${a.topic.trim()}" sudah siap. Klik "Lanjut ke Langkah 2" di bawah.`;
+    a.msg = `Berhasil membuat ${qs.length} soal "${a.topic.trim()}". Silakan klik "Lanjut ke Langkah 2" di bawah.`;
   } catch (err) {
     let detail = err.message || 'Terjadi kesalahan. Coba lagi.';
     if (/Failed to fetch|NetworkError/i.test(detail)) {
@@ -164,7 +177,7 @@ async function aiGen() {
 }
 
 /**
- * Formulir pembuat soal AI (Langkah 1) – gaya kotak prompt ChatGPT / Claude / Gemini
+ * Komposer pembuat soal AI (Langkah 1) – minimalis, padat, sesuai kaidah UI/UX
  */
 function aiPanel2() {
   const a = S.ai;
@@ -174,41 +187,81 @@ function aiPanel2() {
 
   const opt = (v, label, cur) => `<option value="${esc(String(v))}"${String(cur) === String(v) ? ' selected' : ''}>${label}</option>`;
 
-  const jenjangSel = `<label class='chip-sel'><span>Jenjang:</span><select aria-label='Jenjang' onchange='setJenjang(this.value)'>${JENJANG.map(x => opt(x[0], x[1], a.jenjang)).join('')}</select></label>`;
-  const kelasSel = j[3].length
-    ? `<label class='chip-sel'><span>Kelas:</span><select aria-label='Kelas' onchange='S.ai.cls=+this.value'>${j[3].map(k => opt(k, 'Kelas ' + k, a.cls)).join('')}</select></label>`
-    : '';
-  const mapelSel = `<label class='chip-sel'><span>Mapel:</span><select aria-label='Mata pelajaran' onchange='S.ai.mapel=this.value'>${opt('', 'Otomatis', a.mapel)}${list.map(m => opt(m, m, a.mapel)).join('')}</select></label>`;
-  const nSel = `<label class='chip-sel'><span>Jumlah:</span><select aria-label='Jumlah soal' onchange='S.ai.n=+this.value'>${N_CHOICES.map(([v, label]) => opt(v, label, a.n)).join('')}</select></label>`;
-  const dSel = `<label class='chip-sel'><span>Tingkat:</span><select aria-label='Tingkat kesulitan' onchange='S.ai.diff=this.value'>${DIFF.map(v => opt(v, v.charAt(0).toUpperCase() + v.slice(1), a.diff)).join('')}</select></label>`;
+  return `<div class='ai-shell'>
+    <div class='ai-header'>
+      <h2 class='ai-title d'>Buat Soal Kuis dengan AI</h2>
+      <p class='ai-subtitle'>Pilih tingkat kelas &amp; mata pelajaran, lalu ketik topik materi yang ingin diujikan.</p>
+    </div>
 
-  const chipsHtml = contoh.map(c =>
-    `<button type='button' class='prompt-chip' onclick='pickContohTopik("${esc(c)}")'>${esc(c)}</button>`
-  ).join('');
+    <div class='ai-composer'>
+      <div class='ai-ctx-bar' aria-label='Pengaturan soal'>
+        <div class='ai-field'>
+          <label for='sel-jenjang'>Jenjang</label>
+          <select id='sel-jenjang' onchange='setJenjang(this.value)'>
+            ${JENJANG.map(x => opt(x[0], x[1], a.jenjang)).join('')}
+          </select>
+        </div>
+        <span class='ai-sep' aria-hidden='true'></span>
+        <div class='ai-field'>
+          <label for='sel-kelas'>Kelas</label>
+          <select id='sel-kelas' onchange='S.ai.cls=+this.value'>
+            ${j[3].map(k => opt(k, 'Kelas ' + k, a.cls)).join('')}
+          </select>
+        </div>
+        <span class='ai-sep' aria-hidden='true'></span>
+        <div class='ai-field ai-field-grow'>
+          <label for='sel-mapel'>Mata Pelajaran</label>
+          <select id='sel-mapel' onchange='S.ai.mapel=this.value'>
+            ${opt('', 'Semua / Otomatis', a.mapel)}
+            ${list.map(m => opt(m, m, a.mapel)).join('')}
+          </select>
+        </div>
+        <span class='ai-sep' aria-hidden='true'></span>
+        <div class='ai-field'>
+          <label for='sel-n'>Jumlah</label>
+          <select id='sel-n' onchange='S.ai.n=+this.value'>
+            ${N_CHOICES.map(([v, label]) => opt(v, label, a.n)).join('')}
+          </select>
+        </div>
+        <span class='ai-sep' aria-hidden='true'></span>
+        <div class='ai-field'>
+          <label for='sel-diff'>Kesulitan</label>
+          <select id='sel-diff' onchange='S.ai.diff=this.value'>
+            ${DIFF.map(v => opt(v, v.charAt(0).toUpperCase() + v.slice(1), a.diff)).join('')}
+          </select>
+        </div>
+      </div>
 
-  return `<div class='chatbox'>
-    <h2 class='chat-title d'>Mau buat soal tentang apa hari ini?</h2>
-    <p class='chat-sub'>Ketik topik atau bab pelajaran di kotak bawah ini, lalu tekan <b>Buat Soal</b>.</p>
-    <div class='chat-input'>
-      <textarea id='at' rows='3' maxlength='200' ${a.busy ? 'disabled' : ''}
-        placeholder='Ketik topik soal di sini… (contoh: ${esc(contoh[0])})'
-        aria-label='Tulis topik soal'
-        oninput='S.ai.topic=this.value'
-        onkeydown='if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();aiGen()}'>${esc(a.topic)}</textarea>
-      <div class='chat-bar'>
-        <div class='chat-opts'>${jenjangSel}${kelasSel}${mapelSel}${nSel}${dSel}</div>
-        <button type='button' class='chat-send' ${a.busy ? 'disabled' : ''} onclick='aiGen()'>${a.busy ? 'Sedang Membuat…' : 'Buat Soal'}</button>
+      <div class='ai-prompt-body'>
+        <textarea id='at' rows='2' maxlength='200' ${a.busy ? 'disabled' : ''}
+          placeholder='Ketik topik atau materi soal di sini… (contoh: ${esc(contoh[0])})'
+          aria-label='Tulis topik soal'
+          oninput='S.ai.topic=this.value'
+          onkeydown='if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();aiGen()}'>${esc(a.topic)}</textarea>
+
+        ${a.showSrc || a.src ? `
+        <div class='ai-src-box'>
+          <div class='ai-src-head'>
+            <span>Teks Bacaan / Materi Sumber (Opsional)</span>
+            <button type='button' class='ai-link-btn' onclick='S.ai.src="";S.ai.showSrc=false;render()'>Tutup</button>
+          </div>
+          <textarea id='as' rows='3' placeholder='Tempel ringkasan materi atau bacaan di sini agar soal dibuat khusus dari teks ini…' oninput='S.ai.src=this.value'>${esc(a.src)}</textarea>
+        </div>` : ''}
+      </div>
+
+      <div class='ai-footer-bar'>
+        <div class='ai-footer-left'>
+          ${!a.showSrc && !a.src ? `<button type='button' class='ai-link-btn' onclick='toggleAiSrc()'>+ Lampirkan teks bacaan</button><span class='ai-dot'>·</span>` : ''}
+          <span class='ai-ex-label'>Contoh:</span>
+          ${contoh.map((c, idx) => `<button type='button' class='ai-ex-link' onclick='pickContohTopik("${esc(c)}")'>${esc(c)}</button>${idx < contoh.length - 1 ? `<span class='ai-dot'>,</span>` : ''}`).join('')}
+        </div>
+        <button type='button' class='ai-submit-btn' ${a.busy ? 'disabled' : ''} onclick='aiGen()'>
+          ${a.busy ? 'Menyusun Soal…' : 'Buat Soal'}
+        </button>
       </div>
     </div>
-    <div class='prompt-examples'>
-      <span>Contoh topik:</span>
-      ${chipsHtml}
-    </div>
-    ${a.busy ? `<p class='chat-hint'>Sedang menyusun soal dengan AI, mohon tunggu sekitar 10–25 detik…</p>` : ''}
-    <details class='ai-more'>
-      <summary>Punya teks bacaan atau materi sendiri? (opsional)</summary>
-      <textarea id='as' rows='4' class='chat-src' placeholder='Tempel ringkasan materi atau teks bacaan di sini. Jika diisi, soal akan dibuat berdasarkan teks ini.' oninput='S.ai.src=this.value'>${esc(a.src)}</textarea>
-    </details>
-    ${a.msg ? `<div class='aimsg' role='status' style='background:${a.ok ? '#D1FAE5' : '#FEE2E2'}'>${esc(a.msg)}</div>` : ''}
+
+    ${a.busy ? `<div class='ai-status-note'>Sedang menyusun soal dengan AI, mohon tunggu sekitar 10–25 detik…</div>` : ''}
+    ${a.msg ? `<div class='aimsg ${a.ok ? 'ok' : 'err'}' role='status'>${esc(a.msg)}</div>` : ''}
   </div>`;
 }
