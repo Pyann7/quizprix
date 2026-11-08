@@ -1,6 +1,6 @@
-﻿# QuizPrix – Kelas Jadi Lomba 🏁
+# QuizPrix – Kelas Jadi Lomba 🏁
 
-Kuis interaktif 2 tim untuk **IFP (Interactive Flat Panel)** dan proyektor kelas, untuk **semua jenjang** (SD, SMP, SMA/SMK, Perguruan Tinggi, Umum). Frontend web murni (HTML, CSS, JS Vanilla) + satu fungsi serverless di **Vercel** untuk membuat soal dengan AI.
+Kuis interaktif 2 tim untuk **IFP (Interactive Flat Panel)** dan proyektor kelas, untuk **semua jenjang sekolah** (SD/MI, SMP/MTs, SMA/SMK/MA). Frontend web murni (HTML, CSS, JS Vanilla) + satu fungsi serverless di **Vercel** untuk membuat soal dengan AI.
 
 Tidak ada bank soal bawaan: guru mengetik topik, memilih jenjang/kelas, lalu AI membuat soalnya.
 

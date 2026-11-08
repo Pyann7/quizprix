@@ -3008,3 +3008,151 @@ textarea { border: 1px solid #B9B09B; border-radius: 10px; font-size: 1rem; }
 .ai-more summary { cursor: pointer; font-weight: 700; color: var(--ink-soft); font-size: .92rem; }
 .aib input[type="text"] { font-size: 1.05rem; min-height: 48px; }
 .aimsg { font-size: 1rem; }
+
+
+/* ---------- Kotak chat pembuat soal ---------- */
+.chatbox {
+  max-width: 780px;
+  margin: var(--sp-6) auto var(--sp-8);
+  text-align: center;
+}
+.chat-title {
+  font-family: 'Fraunces', Georgia, serif;
+  text-transform: none;
+  font-size: clamp(1.5rem, 3vw, 2.15rem);
+  margin: 0 0 var(--sp-2);
+}
+.chat-sub {
+  margin: 0 0 var(--sp-5);
+  color: var(--ink-soft);
+  font-size: 1rem;
+}
+.chat-input {
+  background: #fff;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 20px;
+  box-shadow: var(--sh-2);
+  padding: var(--sp-4);
+  text-align: left;
+  transition: box-shadow 0.15s ease;
+}
+.chat-input:focus-within {
+  box-shadow: 0 0 0 3px var(--y), var(--sh-2);
+}
+.chat-input textarea {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  resize: none;
+  background: transparent;
+  font: inherit;
+  font-size: 1.15rem;
+  line-height: 1.5;
+  padding: var(--sp-1) var(--sp-2) var(--sp-3);
+  color: var(--ink);
+}
+.chat-input textarea::placeholder {
+  color: #8C8577;
+}
+.chat-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  padding-top: var(--sp-3);
+  border-top: 1px solid #EDE7D9;
+}
+.chat-opts {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  align-items: center;
+}
+.chip-sel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: var(--sp-1) var(--sp-3);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.chip-sel select {
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  outline: 0;
+  padding: var(--sp-1) 0;
+}
+.chat-send {
+  background: var(--y);
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  padding: var(--sp-2) var(--sp-5);
+  min-height: 44px;
+  font-weight: 800;
+  font-size: 0.98rem;
+  box-shadow: none;
+  transition: background 0.12s ease, transform 0.08s ease;
+}
+.chat-send:hover:not(:disabled) {
+  background: #F5C428;
+  transform: translateY(-1px);
+}
+.chat-send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.prompt-examples {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.prompt-chip {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: var(--sp-1) var(--sp-3);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.prompt-chip:hover {
+  background: var(--y);
+  border-color: var(--ink);
+}
+.chat-hint {
+  margin: var(--sp-3) 0 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.chat-src {
+  width: 100%;
+  font: inherit;
+  padding: var(--sp-3);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin-top: var(--sp-2);
+}
+.chatbox .ai-more {
+  text-align: left;
+  margin-top: var(--sp-4);
+}
+.chatbox .aimsg {
+  margin-top: var(--sp-4);
+  text-align: left;
+}

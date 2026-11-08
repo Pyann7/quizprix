@@ -16,9 +16,7 @@ const PROVIDER_TIMEOUT_MS = 25000;
 const JENJANG_LABEL = {
   sd: 'SD/MI',
   smp: 'SMP/MTs',
-  sma: 'SMA/SMK/MA',
-  pt: 'Perguruan Tinggi',
-  umum: 'peserta umum/pelatihan'
+  sma: 'SMA/SMK/MA'
 };
 const DIFF_OK = ['mudah', 'sedang', 'sulit'];
 const N_OK = [5, 10];
@@ -185,7 +183,7 @@ module.exports = async function handler(req, res) {
   }
   body = body || {};
 
-  const jenjang = Object.keys(JENJANG_LABEL).includes(body.jenjang) ? body.jenjang : 'umum';
+  const jenjang = Object.keys(JENJANG_LABEL).includes(body.jenjang) ? body.jenjang : 'smp';
   const n = N_OK.includes(Number(body.n)) ? Number(body.n) : 10;
   const p = {
     topic: clean(body.topic, 200),

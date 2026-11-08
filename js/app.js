@@ -412,7 +412,7 @@ function tutorialModal() {
         <div class="tut-step">
           <span class="tut-step-num">Langkah 1</span>
           <h4>Buat Soal dengan AI</h4>
-          <p>Ketik topik, pilih <b>jenjang &amp; kelas</b> (SD sampai Umum), lalu <b>AI</b> membuat soalnya otomatis dalam hitungan detik.</p>
+          <p>Ketik topik, pilih <b>jenjang &amp; kelas</b> (SD, SMP, SMA/SMK), lalu <b>AI</b> membuat soalnya otomatis dalam hitungan detik.</p>
         </div>
         <div class="tut-step">
           <span class="tut-step-num">Langkah 2</span>
@@ -456,7 +456,7 @@ function landing() {
       <div class="hero">
         <section class="hero-left">
           <div>
-            <span class="tag" style="background:var(--y)">${ic('cap', 16)} Semua Jenjang · SD, SMP, SMA &amp; Umum</span>
+            <span class="tag" style="background:var(--y)">${ic('cap', 16)} Semua Jenjang Sekolah · SD, SMP &amp; SMA/SMK</span>
             <h1 style="margin-top:14px">Kelas jadi<br><span>lomba.</span></h1>
             <p class="hero-lead">Kuis interaktif 2 tim khusus layar sentuh <b>Interactive Flat Panel (IFP)</b> dan proyektor kelas. Dua siswa maju dan berduel langsung di sisi kiri &amp; kanan layar!</p>
           </div>
@@ -724,13 +724,6 @@ function setup1() {
   return head(`${fullBtnHtml()}<button class='btn w' onclick='gL()'>Beranda</button>`) +
     `<div class='wrap'>
       ${renderStepper()}
-      <div class='step-head'>
-        <div>
-          <h2>Langkah 1 · Buat Soal</h2>
-          <p>Pilih jenjang dan mata pelajaran, tulis topiknya, lalu soal dibuat otomatis.</p>
-        </div>
-        <span class='tag' style='background:var(--y)'>Langkah 1 dari 4</span>
-      </div>
       ${aiPanel2()}
       ${mine ? `<h3 style='margin:0 0 12px'>Paket Soal Tersimpan</h3><div class='pk4' style='margin-bottom:24px'>${mine}</div>` : ''}
       <div class='selbar'>

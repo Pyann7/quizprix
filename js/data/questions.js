@@ -22,9 +22,7 @@ const MAPEL = {
 const JENJANG = [
   ['sd', 'SD / MI', 'SD', [1, 2, 3, 4, 5, 6]],
   ['smp', 'SMP / MTs', 'SMP', [7, 8, 9]],
-  ['sma', 'SMA / SMK / MA', 'SMA', [10, 11, 12]],
-  ['pt', 'Perguruan Tinggi', 'PT', []],
-  ['umum', 'Umum / Pelatihan', 'Umum', []]
+  ['sma', 'SMA / SMK / MA', 'SMA', [10, 11, 12]]
 ];
 
 // Soal contoh khusus untuk animasi preview di halaman depan (bukan bank soal)
