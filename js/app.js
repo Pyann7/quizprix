@@ -82,7 +82,8 @@ const S = {
   roundStart: 0,
   winByTime: false,
   xc: 0,
-  mute: false
+  mute: false,
+  bgmOff: false
 };
 
 // Initialize AI sub-state
@@ -131,7 +132,11 @@ const head = (r = '') =>
 const pkg = () => BANK.find(p => p.id === S.pkg) || null;
 const Q = () => (pkg() ? pkg().qs : []);
 const hasPkg = () => !!pkg();
-const go = (v) => { S.view = v; render(); };
+const go = (v) => {
+  if (v !== 'game' && typeof stopBgm === 'function') stopBgm();
+  S.view = v;
+  render();
+};
 const gL = () => go('landing');
 const mode = () => MODES.find(m => m[0] === S.mode) || MODES[0];
 const qtypeObj = (k = S.qtype) => QTYPES.find(q => q[0] === k) || QTYPES[0];
@@ -820,11 +825,12 @@ function start() {
     winByTime: false
   });
   cur = [0, 0];
-  playStart();
   S.n1 = S.n1.trim() || 'Tim Biru';
   S.n2 = S.n2.trim() || 'Tim Merah';
   newRound();
   go('game');
+  playStart();
+  if (typeof startBgm === 'function') startBgm();
 }
 
 function newRound() {
@@ -840,7 +846,7 @@ function newRound() {
   clearInterval(tm);
   tm = setInterval(() => {
     S.left--;
-    if (S.left <= 5 && S.left > 0) playTick();
+    if (S.left <= 5 && S.left > 0) playTick(S.left);
     const t = $('#tm');
     if (t) {
       t.textContent = S.left;
@@ -1074,6 +1080,7 @@ function finish() {
   } else {
     S.win = -1;
   }
+  if (typeof stopBgm === 'function') stopBgm();
   S.view = 'done';
   render();
   S.win < 0 ? playLoseSound() : playWinSound();
@@ -1359,8 +1366,9 @@ function game() {
         <span class='tag'>${mode()[1]} ${mode()[2]}</span>
       </div>
       <div class='timer d ${S.left <= 5 ? 'low' : ''}' id='tm'>${S.left}</div>
-      <div style='text-align:right'>
-        <button class='btn w' onclick='toggleMute()' aria-label='Suara' title='Suara'>${ic(S.mute ? 'mute' : 'sound', 18)}</button>
+      <div style='text-align:right;display:flex;gap:8px;align-items:center;justify-content:flex-end'>
+        <button class='btn w' onclick='toggleBgm()' aria-label='Musik Latar' title='Musik Latar (Backsound)'>${S.bgmOff || S.mute ? '🔇 Musik' : '🎵 Musik'}</button>
+        <button class='btn w' onclick='toggleMute()' aria-label='Suara' title='Efek Suara &amp; Musik'>${ic(S.mute ? 'mute' : 'sound', 18)}</button>
         ${fullBtnHtml(true)}
         <button class='btn w' onclick='exitGame()'>${S.xc ? 'Yakin keluar?' : 'Keluar'}</button>
       </div>
