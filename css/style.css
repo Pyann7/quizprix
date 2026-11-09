@@ -4434,3 +4434,388 @@ textarea {
     flex: 1;
   }
 }
+
+/* ==========================================================================
+   FULL MULTI-DEVICE RESPONSIVE SYSTEM (Mobile · Tablet · Desktop · Large IFP)
+   ========================================================================== */
+
+/* 1. Desktop & IFP Full-Viewport Arena (Tidak ada ruang kosong / scrollbar gantung) */
+@media (min-width: 1025px) and (min-height: 660px) {
+  .arena {
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .arena .top {
+    flex: 0 0 auto;
+  }
+
+  .arena .cols {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    align-items: stretch !important;
+    padding-top: var(--sp-3) !important;
+    padding-bottom: var(--sp-2) !important;
+  }
+
+  .team-side-col,
+  .arena-mid {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .team-side-col .pan {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .pan-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: clamp(6px, 0.9vh, 14px);
+  }
+
+  .pan-body .opt {
+    margin-bottom: 0 !important;
+    padding: clamp(8px, 1.2vh, 16px) var(--sp-3) !important;
+  }
+
+  .arena-mid:not(.is-over) .stage {
+    flex: 1 1 0;
+    min-height: 0;
+  }
+
+  .arena-mid:not(.is-over) .stage #gsc,
+  .arena-mid:not(.is-over) .stage svg {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .arena-mid.is-over .stage {
+    flex: 0 1 30%;
+    min-height: 96px;
+    max-height: 26vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .arena-mid.is-over .stage #gsc {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .arena-mid.is-over .stage svg {
+    width: 100%;
+    height: 100%;
+    max-height: 23vh;
+    object-fit: contain;
+  }
+
+  .arena-mid.is-over .round-result-card {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .arena .prog {
+    flex: 0 0 auto;
+    margin-top: var(--sp-2) !important;
+    margin-bottom: var(--sp-3) !important;
+  }
+}
+
+/* 2. Layar Besar IFP (Interactive Flat Panel 65"–86", 1080p Lebar, 2K & 4K) */
+@media (min-width: 1600px) {
+  html {
+    font-size: clamp(16px, 0.92vw, 22px);
+  }
+
+  .wrap,
+  .hero-page {
+    max-width: min(94vw, 1880px) !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .ai-shell,
+  .ai-ready-card,
+  .ai-saved-section {
+    max-width: min(88vw, 1340px) !important;
+  }
+
+  .arena .cols {
+    grid-template-columns: 1fr 1.25fr 1fr !important;
+    gap: clamp(16px, 1.4vw, 28px) !important;
+    padding: clamp(12px, 1.2vh, 24px) clamp(20px, 1.8vw, 36px) !important;
+  }
+
+  .pan .q {
+    font-size: clamp(1.25rem, 1.45vw, 1.75rem) !important;
+  }
+
+  .opt,
+  .drag-card,
+  .b-key {
+    min-height: clamp(48px, 5.2vh, 68px);
+    font-size: clamp(1rem, 1.1vw, 1.35rem);
+  }
+
+  .b-slot {
+    width: clamp(40px, 2.8vw, 56px);
+    height: clamp(44px, 3.1vw, 60px);
+    font-size: clamp(1.1rem, 1.3vw, 1.5rem);
+  }
+
+  .timer {
+    width: clamp(64px, 4.4vw, 84px);
+    height: clamp(64px, 4.4vw, 84px);
+    line-height: clamp(60px, 4.2vw, 80px);
+    font-size: clamp(2rem, 2.4vw, 2.8rem);
+  }
+}
+
+/* 3. Tablet & Layar Menengah (<= 1024px) */
+@media (max-width: 1024px) {
+  header {
+    padding: var(--sp-3) var(--sp-4) !important;
+    flex-wrap: wrap;
+  }
+
+  .wrap,
+  .hero-page {
+    padding: var(--sp-4) var(--sp-4) var(--sp-6) !important;
+  }
+
+  .hero {
+    grid-template-columns: 1fr !important;
+    gap: var(--sp-5) !important;
+  }
+
+  .stepper {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .qtype-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--sp-4) !important;
+  }
+
+  .th {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+
+  .summary-box {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Pada tablet, panggung animasi di atas penuh, 2 tim tetap berdampingan di bawahnya */
+  .arena .cols {
+    grid-template-columns: 1fr 1fr !important;
+    gap: var(--sp-3) !important;
+    padding: var(--sp-3) var(--sp-4) !important;
+  }
+
+  .arena-mid {
+    grid-column: 1 / -1;
+    order: -1;
+  }
+
+  .arena-mid .stage svg {
+    max-height: 220px;
+  }
+}
+
+/* 4. Smartphone & Layar Kecil (<= 680px) */
+@media (max-width: 680px) {
+  header {
+    padding: 10px 14px !important;
+    gap: 8px !important;
+  }
+
+  header > .tag {
+    display: none !important;
+  }
+
+  .wrap,
+  .hero-page {
+    padding: 14px !important;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 8.5vw, 2.6rem) !important;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-cta .btn,
+  .hero-cta .tut-trigger {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pv-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .pv-tabs {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .pvc {
+    grid-template-columns: 1fr !important;
+  }
+
+  .pvc > div:nth-child(2) {
+    order: -1;
+    max-width: 100%;
+  }
+
+  .stepper {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    margin-bottom: var(--sp-4) !important;
+  }
+
+  .step-btn {
+    padding: 8px 10px !important;
+    gap: 8px !important;
+  }
+
+  .step-info b {
+    font-size: 0.85rem;
+  }
+
+  .step-info small {
+    font-size: 0.72rem;
+  }
+
+  .step-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .qtype-grid,
+  .row,
+  .summary-box,
+  .srcs {
+    grid-template-columns: 1fr !important;
+  }
+
+  .th {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .selbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 14px !important;
+    gap: 10px !important;
+  }
+
+  .selbar-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .selbar .btn,
+  .selbar .btn.big {
+    flex: 1;
+    width: 100%;
+    margin-left: 0 !important;
+  }
+
+  /* Arena Permainan di Mobile */
+  .arena .top {
+    grid-template-columns: 1fr auto !important;
+    gap: 8px !important;
+    padding: 8px 12px !important;
+  }
+
+  .arena .top-left-info {
+    grid-column: 1 / 2;
+    flex-wrap: wrap;
+  }
+
+  .arena .timer {
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+    order: 0;
+    width: 50px;
+    height: 50px;
+    line-height: 46px;
+    font-size: 1.55rem;
+    margin: 0;
+  }
+
+  .arena .top > div:last-child {
+    grid-column: 1 / 2;
+    justify-content: flex-start !important;
+    flex-wrap: wrap;
+    gap: 6px !important;
+  }
+
+  .arena .top .btn {
+    padding: 6px 10px;
+    font-size: 0.78rem;
+  }
+
+  .arena .cols {
+    grid-template-columns: 1fr !important;
+    padding: 10px 12px !important;
+    gap: 12px !important;
+  }
+
+  .arena .prog {
+    margin: 8px 12px 14px !important;
+  }
+
+  .blank-pad {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+
+  .b-slot {
+    width: 34px;
+    height: 38px;
+    font-size: 0.95rem;
+  }
+
+  .modal .card {
+    width: calc(100vw - 24px);
+    padding: 16px !important;
+  }
+}
+
+/* 5. Layar Ponsel Sangat Kecil (<= 400px) */
+@media (max-width: 400px) {
+  .stepper {
+    grid-template-columns: 1fr !important;
+  }
+
+  .ai-selects select {
+    flex: 1 1 100%;
+  }
+
+  .blank-pad {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
