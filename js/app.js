@@ -1255,17 +1255,21 @@ function panel(t) {
         <span class='tag mini' style='background:#FEF08A'>${qtBadge}</span>
       </div>
       <div class='q'>${formatStem(q[0], qt)}</div>
-      ${interactionHtml}
-      ${S.mode === 'bet' ? `
-        <div style='display:flex;gap:6px;align-items:center;margin-bottom:8px'>
-          <b style='font-size:0.8rem'>TARUHAN</b>
-          ${[1, 2, 3].map(v => `<button class='pill ${S.st[t] === v ? 'on' : ''}' style='margin:0' ${S.over || lk ? 'disabled' : ''} onclick='setStake(${t},${v})'>×${v}</button>`).join('')}
-        </div>
-      ` : ''}
-      <button class='btn ${lk ? 'k' : ''}' style='width:100%' ${dis || S.pick[t] === null ? 'disabled' : ''} onclick='lockIt(${t})'>
-        ${lk ? `${ic('lock', 16)} Terkunci (${S.lock[t].toFixed(1)} dtk)` : 'Kunci Jawaban'}
-      </button>
-      <div style='font-size:0.75rem;margin-top:6px'>${hintText}</div>
+      <div class='pan-body'>
+        ${interactionHtml}
+      </div>
+      <div class='pan-footer'>
+        ${S.mode === 'bet' ? `
+          <div style='display:flex;gap:6px;align-items:center;margin-bottom:8px'>
+            <b style='font-size:0.8rem'>TARUHAN</b>
+            ${[1, 2, 3].map(v => `<button class='pill ${S.st[t] === v ? 'on' : ''}' style='margin:0' ${S.over || lk ? 'disabled' : ''} onclick='setStake(${t},${v})'>×${v}</button>`).join('')}
+          </div>
+        ` : ''}
+        <button class='btn ${lk ? 'k' : ''}' style='width:100%' ${dis || S.pick[t] === null ? 'disabled' : ''} onclick='lockIt(${t})'>
+          ${lk ? `${ic('lock', 16)} Terkunci (${S.lock[t].toFixed(1)} dtk)` : 'Kunci Jawaban'}
+        </button>
+        <div style='font-size:0.75rem;margin-top:6px'>${hintText}</div>
+      </div>
     </section>
   </div>`;
 }
@@ -1375,7 +1379,7 @@ function game() {
     </div>
     <div class='cols'>
       ${panel(0)}
-      <section class='arena-mid'>
+      <section class='arena-mid ${S.over ? 'is-over' : ''}'>
         <div class='stage'><div id='gsc'>${scene(S.theme, cur[0], cur[1], 0)}</div></div>
         ${ban}
       </section>
