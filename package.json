@@ -5,4 +5,3 @@
   "description": "QuizRace – kuis interaktif 2 tim untuk Interactive Flat Panel dengan generator soal AI ganda",
   "engines": { "node": ">=18" }
 }
-

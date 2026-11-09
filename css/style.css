@@ -4439,76 +4439,10 @@ textarea {
    FULL MULTI-DEVICE RESPONSIVE SYSTEM (Mobile · Tablet · Desktop · Large IFP)
    ========================================================================== */
 
-/* Ukuran Default Layar Desktop 75% */
+/* Ukuran Default Layar Desktop 80% (Lebih rapi, proporsional, dan tajam) */
 @media (min-width: 1025px) {
   html {
-    zoom: 0.75;
-  }
-}
-
-/* Zoom Controller Widget (Desktop) */
-.zoom-widget {
-  display: inline-flex;
-  align-items: center;
-  background: #374151;
-  color: #ffffff;
-  border-radius: 999px;
-  padding: 3px 6px 3px 12px;
-  gap: 6px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  user-select: none;
-}
-
-.zoom-val-text {
-  font-variant-numeric: tabular-nums;
-  min-width: 36px;
-  color: #F9FAFB;
-  font-weight: 800;
-  font-size: 0.82rem;
-}
-
-.zoom-btn {
-  background: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
-  border: 0;
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  font-size: 0.95rem;
-  line-height: 1;
-  padding: 0;
-  transition: background 0.15s ease;
-}
-
-.zoom-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.zoom-btn-reset {
-  background: rgba(255, 255, 255, 0.18);
-  color: #F3F4F6;
-  border: 0;
-  border-radius: 999px;
-  padding: 2px 8px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-
-.zoom-btn-reset:hover {
-  background: rgba(255, 255, 255, 0.35);
-  color: #ffffff;
-}
-
-@media (max-width: 1024px) {
-  .zoom-widget {
-    display: none !important;
+    zoom: 0.8;
   }
 }
 

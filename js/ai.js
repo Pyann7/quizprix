@@ -52,6 +52,7 @@ function initAIState(state) {
 
 function saveAI() {
   try {
+    localStorage.setItem('quizrace_ai', JSON.stringify(BANK));
     localStorage.setItem('edurace_ai', JSON.stringify(BANK));
   } catch (e) {
     console.warn('Gagal menyimpan paket ke localStorage:', e);

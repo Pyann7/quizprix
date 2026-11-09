@@ -1,5 +1,5 @@
 /**
- * EduRace – Data Dasar & Paket Soal AI
+ * QuizRace – Data Dasar & Paket Soal AI
  * Tidak ada bank soal bawaan: semua soal dibuat oleh AI (lihat js/ai.js dan api/generate.js).
  */
 
@@ -38,7 +38,7 @@ const DEMO_QS = [
 // Paket soal hasil AI yang tersimpan di browser (riwayat), dimuat dari localStorage
 const BANK = [];
 try {
-  const saved = JSON.parse(localStorage.getItem('edurace_ai') || '[]');
+  const saved = JSON.parse(localStorage.getItem('quizrace_ai') || localStorage.getItem('edurace_ai') || '[]');
   saved.forEach(b => {
     if (!b || !Array.isArray(b.qs) || !b.qs.length) return;
     if (!b.meta) {
