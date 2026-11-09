@@ -723,10 +723,10 @@ function setup1() {
   const mine = BANK.map((b, i) =>
     `<button type='button' class='saved-item ${b.id === S.pkg ? 'on' : ''}' onclick='pickPkg(${i})'>
       <div class='saved-item-main'>
-        <b>${b.name}</b>
-        <span class='saved-meta'>${esc(b.meta || 'Sekolah')} · ${b.qs.length} soal</span>
+        <div class='saved-item-title'>${esc(b.name)}</div>
+        <div class='saved-meta'>${esc(b.meta || 'Sekolah')} · ${b.qs.length} soal</div>
       </div>
-      <span class='saved-pick'>${b.id === S.pkg ? '✓ Terpilih' : 'Pilih'}</span>
+      <span class='saved-pick-badge'>${b.id === S.pkg ? '✓ Terpilih' : 'Pilih'}</span>
     </button>`
   ).join('');
 
@@ -735,27 +735,53 @@ function setup1() {
       ${renderStepper()}
       ${aiPanel2()}
       ${p ? `
-      <div class='selbar ai-ready-bar'>
-        <div class='selbar-left'>
-          <div>
-            <span class='tag' style='background:var(--y);margin-right:6px'>${p.meta}</span>
-            <b>${p.name}</b> <span style='font-weight:700;color:#4B5563'>(${p.qs.length} soal siap dimainkan)</span>
+      <div class='ai-ready-card' role='region' aria-label='Paket Soal Terpilih'>
+        <div class='ai-ready-top'>
+          <div class='ai-ready-info'>
+            <div class='ai-ready-badges'>
+              <span class='tag' style='background:var(--y);font-weight:800'>${esc(p.meta || 'Umum')}</span>
+              <span class='ready-status-pill'>✓ ${p.qs.length} Soal Siap Dimainkan</span>
+            </div>
+            <h3 class='ai-ready-name'>${esc(p.name)}</h3>
           </div>
-          <details>
-            <summary style='cursor:pointer;font-size:0.88rem;font-weight:700'>Lihat daftar soal &amp; kunci jawaban</summary>
-            <ol style='font-size:0.85rem;margin:6px 0'>
-              ${p.qs.map(q => `<li>${q[0]} — <b>Kunci: ${'ABCD'[q[2]]}. ${q[1][q[2]]}</b></li>`).join('')}
-            </ol>
-          </details>
+          <div class='ai-ready-actions'>
+            <button type='button' class='btn w btn-sm' onclick='aiDel()' title='Hapus paket ini'>Hapus Paket</button>
+            <button type='button' class='btn big btn-next-step' onclick='S.step=2;render()'>
+              Lanjut ke Langkah 2 ➔
+            </button>
+          </div>
         </div>
-        <div class='selbar-actions'>
-          <button class='btn w' onclick='aiDel()'>Hapus Paket</button>
-          <button class='btn big' onclick='S.step=2;render()'>Lanjut ke Langkah 2</button>
-        </div>
+
+        <details class='ai-ready-details'>
+          <summary>
+            <span class='summary-title'>
+              <span class='summary-chevron'>▶</span>
+              Lihat ${p.qs.length} Butir Soal &amp; Kunci Jawaban
+            </span>
+            <span class='summary-hint'>Klik untuk pratinjau</span>
+          </summary>
+          <div class='ai-ready-qlist'>
+            ${p.qs.map((q, idx) => `
+              <div class='ai-qitem'>
+                <div class='ai-qitem-num'>${idx + 1}</div>
+                <div class='ai-qitem-body'>
+                  <div class='ai-qitem-text'>${esc(q[0])}</div>
+                  <div class='ai-qitem-meta'>
+                    <span class='ai-qitem-key'>Kunci: <b>${'ABCD'[q[2]]}. ${esc(q[1][q[2]])}</b></span>
+                    ${q[3] ? `<span class='ai-qitem-expl'>💡 ${esc(q[3])}</span>` : ''}
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </details>
       </div>` : ''}
       ${mine ? `
       <div class='ai-saved-section'>
-        <div class='ai-saved-title'>Riwayat Paket Soal Tersimpan</div>
+        <div class='ai-saved-header'>
+          <div class='ai-saved-title'>Riwayat Paket Soal Tersimpan (${BANK.length})</div>
+          <small class='ai-saved-hint'>Pilih salah satu paket untuk dimainkan kembali</small>
+        </div>
         <div class='ai-saved-list'>${mine}</div>
       </div>` : ''}
     </div>`;
@@ -1247,26 +1273,82 @@ function game() {
   const d = S.dd || [0, 0];
   const sg = v => (v > 0 ? '+' : '') + v;
 
-  const tt = w === -1
-    ? (m === 'bet' && (d[0] || d[1]) ? 'Poin berubah!' : 'Ronde ini tidak ada pemenang')
-    : w === -2
-    ? 'Kedua tim menjawab benar bersamaan!'
-    : (w ? S.n2 : S.n1) + (m === 'buzz' ? ' paling cepat!' : ' tercepat & unggul di ronde ini! ⚡');
+  let roundHeaderHtml = '';
+  if (w === 0) {
+    roundHeaderHtml = `
+      <div class='round-winner-banner win-blue'>
+        <span class='winner-icon'>⚡</span>
+        <span class='winner-text'><b>${esc(S.n1)}</b> ${m === 'buzz' ? 'paling cepat mengunci jawaban!' : 'tercepat &amp; unggul di ronde ini!'}</span>
+      </div>`;
+  } else if (w === 1) {
+    roundHeaderHtml = `
+      <div class='round-winner-banner win-red'>
+        <span class='winner-icon'>⚡</span>
+        <span class='winner-text'><b>${esc(S.n2)}</b> ${m === 'buzz' ? 'paling cepat mengunci jawaban!' : 'tercepat &amp; unggul di ronde ini!'}</span>
+      </div>`;
+  } else if (w === -2) {
+    roundHeaderHtml = `
+      <div class='round-winner-banner win-tie'>
+        <span class='winner-icon'>🤝</span>
+        <span class='winner-text'>Kedua tim menjawab benar bersamaan!</span>
+      </div>`;
+  } else {
+    roundHeaderHtml = `
+      <div class='round-winner-banner win-none'>
+        <span class='winner-icon'>⏱️</span>
+        <span class='winner-text'>${m === 'bet' && (d[0] || d[1]) ? 'Poin ronde ini diperbarui!' : 'Ronde ini selesai tanpa pemenang.'}</span>
+      </div>`;
+  }
 
-  const roundStat = [0, 1].map(t => {
-    const nm = t ? S.n2 : S.n1;
-    const tmStr = S.lock[t] !== null ? `${S.lock[t].toFixed(1)} dtk` : '—';
-    return `<b>${esc(nm)}:</b> ${sg(d[t])} poin (${tmStr}${w === t ? ' ⚡' : ''})`;
-  }).join(' &nbsp;·&nbsp; ');
+  const teamCard = (t) => {
+    const isWin = w === t;
+    const isBlue = t === 0;
+    const nm = isBlue ? S.n1 : S.n2;
+    const tmVal = S.lock[t];
+    const tmStr = tmVal !== null ? `${tmVal.toFixed(1)} dtk` : '—';
+    const pts = d[t];
+    const ptCls = pts > 0 ? 'pos' : pts < 0 ? 'neg' : 'zero';
+    return `
+      <div class='round-team-item ${isBlue ? 'blue' : 'red'} ${isWin ? 'won' : ''}'>
+        <div class='team-item-head'>
+          <span class='team-dot'></span>
+          <span class='team-name'>${esc(nm)}</span>
+          ${isWin ? `<span class='team-fast-tag'>⚡ Unggul</span>` : ''}
+        </div>
+        <div class='team-item-stats'>
+          <span class='team-pts ${ptCls}'>${sg(pts)} poin</span>
+          <span class='team-time'>⏱️ ${tmStr}</span>
+        </div>
+      </div>
+    `;
+  };
 
   const ban = S.over ? `
-    <div class='ban'>
-      <h3>${tt}</h3>
-      <p>
-        <span style='display:inline-block;background:#FEF9C3;border:1.5px solid #000;padding:2px 8px;margin-bottom:4px;font-size:0.85rem'>${roundStat}</span><br>
-        <b>Kunci: ${'ABCD'[q[2]]}. ${q[1][q[2]]}</b><br>${q[3]}
-      </p>
-      <button class='btn big' style='width:100%' onclick='nextQ()'>${S.i + 1 >= n ? 'Lihat Hasil Akhir' : 'Soal Berikutnya'} (Spasi)</button>
+    <div class='round-result-card' role='region' aria-label='Hasil Ronde'>
+      ${roundHeaderHtml}
+
+      <div class='round-teams-row'>
+        ${teamCard(0)}
+        ${teamCard(1)}
+      </div>
+
+      <div class='round-answer-box'>
+        <div class='key-header'>
+          <span class='key-pill'>KUNCI JAWABAN</span>
+          <span class='key-text'><b>${'ABCD'[q[2]]}.</b> ${esc(q[1][q[2]])}</span>
+        </div>
+        ${q[3] ? `
+          <div class='round-expl'>
+            <div class='expl-label'>💡 Pembahasan:</div>
+            <div class='expl-body'>${esc(q[3])}</div>
+          </div>
+        ` : ''}
+      </div>
+
+      <button type='button' class='round-next-btn' onclick='nextQ()' autofocus>
+        <span>${S.i + 1 >= n ? 'Lihat Peringkat &amp; Hasil Akhir' : 'Lanjut ke Soal Berikutnya'}</span>
+        <span class='key-shortcut'>Spasi ␣</span>
+      </button>
     </div>
   ` : '';
 
@@ -1358,7 +1440,7 @@ function review() {
               ${t ? S.n2 : S.n1}: ${esc(ansDesc)}
             </span>`;
           }).join('')}
-          <div class="ban" style="background:var(--y);box-shadow:2px 2px 0 #000;margin-top:8px">${q[3]}</div>
+          ${q[3] ? `<div class="review-expl-box"><b>💡 Pembahasan:</b> ${esc(q[3])}</div>` : ''}
         </div>`;
       }).join('')}
       <button class="btn big" onclick="go(\'setup\')">Kembali ke Pengaturan</button>

@@ -3131,38 +3131,287 @@ textarea { border: 1px solid #B9B09B; border-radius: 10px; font-size: 1rem; }
   color: var(--ink-soft);
 }
 
-.ai-shell .aimsg {
+/* Alert Notification */
+.aimsg {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-weight: 600;
+  font-size: 0.92rem;
   margin-top: var(--sp-3);
-  font-size: 0.95rem;
+  border: 1.5px solid transparent;
 }
 
-.ai-shell .aimsg.ok {
-  background: #D1FAE5;
+.aimsg.ok {
+  background: #ECFDF5;
+  border-color: #A7F3D0;
+  color: #065F46;
 }
 
-.ai-shell .aimsg.err {
-  background: #FEE2E2;
+.aimsg.err {
+  background: #FEF2F2;
+  border-color: #FECACA;
+  color: #991B1B;
 }
 
-/* Banner lanjut langkah 2 (hanya muncul setelah soal selesai dibuat/dipilih) */
-.ai-ready-bar {
+.aimsg-ic {
+  font-size: 1.15rem;
+  line-height: 1;
+  flex: none;
+}
+
+/* ==========================================================================
+   REDESIGNED: Step 1 Active Ready Packet Card (.ai-ready-card)
+   ========================================================================== */
+.ai-ready-card {
   max-width: 960px;
-  margin: 0 auto var(--sp-5);
+  margin: var(--sp-4) auto var(--sp-5);
+  background: #ffffff;
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 3px 3px 0 var(--ink);
+  padding: 18px 22px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-/* Riwayat paket soal tersimpan yang ringkas */
+.ai-ready-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+.ai-ready-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.ai-ready-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ready-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #ECFDF5;
+  color: #065F46;
+  border: 1.5px solid #10B981;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.ai-ready-name {
+  font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+  font-weight: 800;
+  color: var(--ink);
+  margin: 2px 0 0;
+  line-height: 1.3;
+}
+
+.ai-ready-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+  flex-wrap: wrap;
+}
+
+.btn-sm {
+  padding: 8px 14px !important;
+  font-size: 0.88rem !important;
+  border-radius: 8px !important;
+}
+
+.btn-next-step {
+  background: #10B981 !important;
+  color: #ffffff !important;
+  border: 2px solid var(--ink) !important;
+  box-shadow: 3px 3px 0 var(--ink) !important;
+  font-weight: 800 !important;
+  font-size: 0.98rem !important;
+  padding: 10px 20px !important;
+  border-radius: 10px !important;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.12s ease !important;
+}
+
+.btn-next-step:hover:not(:disabled) {
+  background: #059669 !important;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink) !important;
+}
+
+.btn-next-step:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink) !important;
+}
+
+/* Accordion Pratinjau Soal */
+.ai-ready-details {
+  margin-top: 14px;
+  border-top: 1px dashed var(--line);
+  padding-top: 12px;
+}
+
+.ai-ready-details summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  list-style: none;
+  user-select: none;
+}
+
+.ai-ready-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--ink);
+  transition: color 0.15s ease;
+}
+
+.ai-ready-details summary:hover .summary-title {
+  color: #2563EB;
+}
+
+.summary-chevron {
+  display: inline-block;
+  font-size: 0.72rem;
+  transition: transform 0.2s ease;
+}
+
+.ai-ready-details[open] .summary-chevron {
+  transform: rotate(90deg);
+}
+
+.summary-hint {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  background: #F3F4F6;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+
+.ai-ready-qlist {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.ai-qitem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #FAF8F2;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.ai-qitem-num {
+  background: var(--ink);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  margin-top: 2px;
+}
+
+.ai-qitem-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.ai-qitem-text {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.ai-qitem-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.ai-qitem-key {
+  font-size: 0.82rem;
+  background: #E0F2FE;
+  color: #0369A1;
+  padding: 2px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  width: fit-content;
+  border: 1px solid #BAE6FD;
+}
+
+.ai-qitem-expl {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   Riwayat Paket Soal Tersimpan
+   ========================================================================== */
 .ai-saved-section {
   max-width: 960px;
-  margin: var(--sp-4) auto 0;
+  margin: var(--sp-5) auto 0;
+}
+
+.ai-saved-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--sp-2);
+  flex-wrap: wrap;
+  gap: 4px;
 }
 
 .ai-saved-title {
-  font-size: 0.82rem;
-  font-weight: 700;
+  font-size: 0.85rem;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  color: var(--ink);
+}
+
+.ai-saved-hint {
+  font-size: 0.8rem;
   color: var(--ink-soft);
-  margin-bottom: var(--sp-2);
 }
 
 .ai-saved-list {
@@ -3176,21 +3425,25 @@ textarea { border: 1px solid #B9B09B; border-radius: 10px; font-size: 1rem; }
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-2);
-  padding: var(--sp-3) var(--sp-4);
-  background: #fff;
-  border: 1px solid var(--line);
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1.5px solid var(--line);
   border-radius: 12px;
   text-align: left;
-  transition: border-color 0.12s ease, background 0.12s ease;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .saved-item:hover {
   border-color: var(--ink);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
 }
 
 .saved-item.on {
-  background: #FFFBEB;
-  border: 1.5px solid var(--ink);
+  background: #FEFCE8;
+  border-color: #CA8A04;
+  box-shadow: 0 2px 8px rgba(202, 138, 4, 0.12), 2px 2px 0 #CA8A04;
 }
 
 .saved-item-main {
@@ -3200,8 +3453,10 @@ textarea { border: 1px solid #B9B09B; border-radius: 10px; font-size: 1rem; }
   min-width: 0;
 }
 
-.saved-item-main b {
+.saved-item-title {
   font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--ink);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -3213,15 +3468,289 @@ textarea { border: 1px solid #B9B09B; border-radius: 10px; font-size: 1rem; }
   font-weight: 500;
 }
 
-.saved-pick {
-  font-size: 0.8rem;
-  font-weight: 700;
+.saved-pick-badge {
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1.5px solid #D1D5DB;
+  background: #F9FAFB;
   color: var(--ink-soft);
-  white-space: nowrap;
+  flex: none;
 }
 
-.saved-item.on .saved-pick {
+.saved-item.on .saved-pick-badge {
+  background: #CA8A04;
+  color: #ffffff;
+  border-color: #CA8A04;
+}
+
+/* ==========================================================================
+   REDESIGNED: Round Result & Explanation Card (.round-result-card)
+   ========================================================================== */
+.round-result-card {
+  background: #FFFFFF;
+  border: 2.5px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 4px 4px 0 var(--ink);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: popIn 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.round-winner-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 1.05rem;
+  text-align: center;
+  border: 2px solid currentColor;
+}
+
+.round-winner-banner.win-blue {
+  background: #EFF6FF;
+  border-color: #2563EB;
+  color: #1D4ED8;
+}
+
+.round-winner-banner.win-red {
+  background: #FEF2F2;
+  border-color: #DC2626;
+  color: #B91C1C;
+}
+
+.round-winner-banner.win-tie {
+  background: #FEFCE8;
+  border-color: #CA8A04;
+  color: #854D0E;
+}
+
+.round-winner-banner.win-none {
+  background: #F3F4F6;
+  border-color: #6B7280;
+  color: #374151;
+}
+
+.winner-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+  flex: none;
+}
+
+.winner-text {
+  line-height: 1.35;
+}
+
+/* Side-by-side team performance cards */
+.round-teams-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.round-team-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1.5px solid #E5E7EB;
+  background: #F9FAFB;
+  transition: all 0.15s ease;
+}
+
+.round-team-item.blue {
+  border-left: 5px solid #2563EB;
+}
+
+.round-team-item.red {
+  border-left: 5px solid #DC2626;
+}
+
+.round-team-item.won {
+  background: #FFFDF0;
+  border-color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.team-item-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: space-between;
+}
+
+.team-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex: none;
+}
+
+.round-team-item.blue .team-dot {
+  background: #2563EB;
+}
+
+.round-team-item.red .team-dot {
+  background: #DC2626;
+}
+
+.team-name {
+  font-size: 0.88rem;
+  font-weight: 800;
   color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.team-fast-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: #FEF08A;
+  color: #854D0E;
+  border: 1px solid #EAB308;
+  padding: 1px 6px;
+  border-radius: 5px;
+  flex: none;
+}
+
+.team-item-stats {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.team-pts {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.team-pts.pos { color: #059669; }
+.team-pts.neg { color: #DC2626; }
+.team-pts.zero { color: #6B7280; }
+
+.team-time {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+/* Answer Key & Explanation */
+.round-answer-box {
+  background: #FAF8F2;
+  border: 1.5px solid #E5E2D8;
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.key-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.key-pill {
+  background: #D1FAE5;
+  color: #065F46;
+  border: 1px solid #10B981;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 5px;
+  letter-spacing: 0.04em;
+  flex: none;
+}
+
+.key-text {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.round-expl {
+  background: #FFFFFF;
+  border-left: 3px solid #F59E0B;
+  border-radius: 0 8px 8px 0;
+  padding: 8px 10px;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: #1F2937;
+}
+
+.expl-label {
+  font-weight: 800;
+  font-size: 0.78rem;
+  color: #B45309;
+  margin-bottom: 2px;
+}
+
+.expl-body {
+  font-weight: 500;
+}
+
+/* Next Question CTA button */
+.round-next-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  background: #FFD23F;
+  color: #000000;
+  border: 2.5px solid #000000;
+  box-shadow: 0 4px 0 #000000;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.1s ease;
+}
+
+.round-next-btn:hover {
+  background: #FACC15;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #000000;
+}
+
+.round-next-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #000000;
+}
+
+.key-shortcut {
+  background: #000000;
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 5px;
+  letter-spacing: 0.03em;
+}
+
+.review-expl-box {
+  background: #FEF9C3;
+  border: 1.5px solid #CA8A04;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-top: 8px;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: #1F2937;
 }
 
 @media (max-width: 680px) {
@@ -3229,4 +3758,7 @@ textarea { border: 1px solid #B9B09B; border-radius: 10px; font-size: 1rem; }
   .ai-selects { width: 100%; }
   .ai-selects select { flex: 1 1 calc(50% - 8px); }
   .ai-submit-btn { width: 100%; }
+  .round-teams-row { grid-template-columns: 1fr; }
+  .ai-ready-actions { width: 100%; justify-content: space-between; }
+  .btn-next-step { flex: 1; }
 }

@@ -208,6 +208,10 @@ function aiPanel2() {
     </div>
 
     ${a.busy ? `<div class='ai-status-note'>Sedang menyusun soal dengan AI, mohon tunggu sekitar 10–25 detik…</div>` : ''}
-    ${a.msg ? `<div class='aimsg ${a.ok ? 'ok' : 'err'}' role='status'>${esc(a.msg)}</div>` : ''}
+    ${a.msg ? `
+      <div class='aimsg ${a.ok ? 'ok' : 'err'}' role='status'>
+        <span class='aimsg-ic'>${a.ok ? '✓' : '⚠️'}</span>
+        <span>${esc(a.msg)}</span>
+      </div>` : ''}
   </div>`;
 }
