@@ -9,8 +9,23 @@
  * Alur: coba penyedia utama; jika error / timeout / hasil tidak valid → otomatis pindah ke cadangan.
  */
 
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
-const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+const cleanModel = m => String(m || '').replace(/^default\s+/i, '').trim();
+
+const GEMINI_MODELS = [
+  cleanModel(process.env.GEMINI_MODEL),
+  'gemini-2.5-flash',
+  'gemini-2.5-flash-lite',
+  'gemini-2.0-flash',
+  'gemini-1.5-flash'
+].filter((m, i, a) => m && !/^AIza|^gsk_|\s/i.test(m) && a.indexOf(m) === i);
+
+const GROQ_MODELS = [
+  cleanModel(process.env.GROQ_MODEL),
+  'llama-3.3-70b-versatile',
+  'meta-llama/llama-4-scout-17b-16e-instruct',
+  'llama-3.1-8b-instant'
+].filter((m, i, a) => m && !/^AIza|^gsk_|\s/i.test(m) && a.indexOf(m) === i);
+
 const PROVIDER_TIMEOUT_MS = 25000;
 
 const JENJANG_LABEL = {
@@ -59,80 +74,110 @@ function withTimeout(ms) {
   return { signal: ctrl.signal, done: () => clearTimeout(timer) };
 }
 
-async function callGemini(prompt) {
-  const key = process.env.GEMINI_API_KEY;
-  if (!key) throw new Error('GEMINI_API_KEY belum diatur');
-  const t = withTimeout(PROVIDER_TIMEOUT_MS);
-  try {
-    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent`, {
-      method: 'POST',
-      signal: t.signal,
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
-      body: JSON.stringify({
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.7,
-          responseMimeType: 'application/json',
-          responseSchema: {
-            type: 'OBJECT',
-            properties: {
-              soal: {
-                type: 'ARRAY',
-                items: {
-                  type: 'OBJECT',
-                  properties: {
-                    pertanyaan: { type: 'STRING' },
-                    pilihan: { type: 'ARRAY', items: { type: 'STRING' } },
-                    jawaban: { type: 'INTEGER' },
-                    pembahasan: { type: 'STRING' }
-                  },
-                  required: ['pertanyaan', 'pilihan', 'jawaban', 'pembahasan']
-                }
-              }
-            },
-            required: ['soal']
-          }
-        }
-      })
-    });
-    const data = await r.json().catch(() => ({}));
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    const text = data.candidates?.[0]?.content?.parts?.map(x => x.text || '').join('');
-    if (!text) throw new Error('respon kosong');
-    return text;
-  } finally {
-    t.done();
+function findEnvKey(name, prefix) {
+  const direct = String(process.env[name] || '').replace(/^["'\s]+|["'\s]+$/g, '');
+  if (direct && (!prefix || direct.startsWith(prefix))) return direct;
+  if (prefix) {
+    for (const val of Object.values(process.env)) {
+      const v = String(val || '').replace(/^["'\s]+|["'\s]+$/g, '');
+      if (v.startsWith(prefix)) return v;
+    }
   }
+  return direct;
+}
+
+async function callGemini(prompt) {
+  const key = findEnvKey('GEMINI_API_KEY', 'AIza');
+  if (!key) throw new Error('GEMINI_API_KEY belum diatur');
+  let lastErr = new Error('Tidak ada model Gemini yang tersedia');
+  for (const model of GEMINI_MODELS) {
+    const t = withTimeout(PROVIDER_TIMEOUT_MS);
+    try {
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+        method: 'POST',
+        signal: t.signal,
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.7,
+            responseMimeType: 'application/json',
+            responseSchema: {
+              type: 'OBJECT',
+              properties: {
+                soal: {
+                  type: 'ARRAY',
+                  items: {
+                    type: 'OBJECT',
+                    properties: {
+                      pertanyaan: { type: 'STRING' },
+                      pilihan: { type: 'ARRAY', items: { type: 'STRING' } },
+                      jawaban: { type: 'INTEGER' },
+                      pembahasan: { type: 'STRING' }
+                    },
+                    required: ['pertanyaan', 'pilihan', 'jawaban', 'pembahasan']
+                  }
+                }
+              },
+              required: ['soal']
+            }
+          }
+        })
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        const msg = data?.error?.message ? ` (${data.error.message.slice(0, 120)})` : '';
+        lastErr = new Error(`HTTP ${r.status} [${model}]${msg}`);
+        if (r.status === 404 || r.status === 400 || r.status === 429 || r.status === 503) continue;
+        throw lastErr;
+      }
+      const text = data.candidates?.[0]?.content?.parts?.map(x => x.text || '').join('');
+      if (!text) throw new Error('respon kosong');
+      return text;
+    } finally {
+      t.done();
+    }
+  }
+  throw lastErr;
 }
 
 async function callGroq(prompt) {
-  const key = process.env.GROQ_API_KEY;
+  const key = findEnvKey('GROQ_API_KEY', 'gsk_');
   if (!key) throw new Error('GROQ_API_KEY belum diatur');
-  const t = withTimeout(PROVIDER_TIMEOUT_MS);
-  try {
-    const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      signal: t.signal,
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
-      body: JSON.stringify({
-        model: GROQ_MODEL,
-        temperature: 0.7,
-        max_tokens: 4096,
-        response_format: { type: 'json_object' },
-        messages: [
-          { role: 'system', content: 'Kamu pembuat soal kuis pendidikan. Balas hanya dengan JSON valid.' },
-          { role: 'user', content: prompt }
-        ]
-      })
-    });
-    const data = await r.json().catch(() => ({}));
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    const text = data.choices?.[0]?.message?.content;
-    if (!text) throw new Error('respon kosong');
-    return text;
-  } finally {
-    t.done();
+  let lastErr = new Error('Tidak ada model Groq yang tersedia');
+  for (const model of GROQ_MODELS) {
+    const t = withTimeout(PROVIDER_TIMEOUT_MS);
+    try {
+      const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        signal: t.signal,
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
+        body: JSON.stringify({
+          model,
+          temperature: 0.7,
+          max_tokens: 4096,
+          response_format: { type: 'json_object' },
+          messages: [
+            { role: 'system', content: 'Kamu pembuat soal kuis pendidikan. Balas hanya dengan JSON valid.' },
+            { role: 'user', content: prompt }
+          ]
+        })
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        const msg = data?.error?.message ? ` (${data.error.message.slice(0, 120)})` : '';
+        lastErr = new Error(`HTTP ${r.status} [${model}]${msg}`);
+        if (r.status === 404 || r.status === 400 || r.status === 429 || r.status === 503) continue;
+        throw lastErr;
+      }
+      const text = data.choices?.[0]?.message?.content;
+      if (!text) throw new Error('respon kosong');
+      return text;
+    } finally {
+      t.done();
+    }
   }
+  throw lastErr;
 }
 
 // Ubah teks JSON model menjadi daftar soal yang tervalidasi

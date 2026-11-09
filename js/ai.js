@@ -120,7 +120,8 @@ async function aiGen() {
         : 'Layanan sedang bermasalah. Coba lagi sebentar.');
     }
     if (!resp.ok) {
-      throw new Error(data && data.error ? data.error : 'Layanan sedang bermasalah. Coba lagi sebentar.');
+      const extra = data && Array.isArray(data.detail) && data.detail.length ? ` (${data.detail.join(' | ')})` : '';
+      throw new Error((data && data.error ? data.error : 'Layanan sedang bermasalah. Coba lagi sebentar.') + extra);
     }
 
     const qs = (data.questions || [])
