@@ -1,5 +1,5 @@
 /**
- * EduRace – Main Application Logic & Game Controller
+ * QuizRace – Main Application Logic & Game Controller
  */
 
 const $ = s => document.querySelector(s);
@@ -125,9 +125,71 @@ function toggleTut(open) {
   render();
 }
 
+// Desktop Zoom Controller (Default 75% di Desktop, customizable with -, +, Reset)
+let currentZoom = 0.75;
+
+function getStoredZoom() {
+  try {
+    const s = localStorage.getItem('quizrace_zoom');
+    if (s && !isNaN(Number(s))) return Math.max(0.5, Math.min(1.5, Number(s)));
+  } catch (e) {}
+  return 0.75;
+}
+
+currentZoom = getStoredZoom();
+
+function applyZoom(z, save = true) {
+  currentZoom = Math.max(0.5, Math.min(1.5, +(+z).toFixed(2)));
+  if (window.innerWidth >= 1025) {
+    document.documentElement.style.zoom = currentZoom;
+  } else {
+    document.documentElement.style.zoom = '';
+  }
+  if (save) {
+    try { localStorage.setItem('quizrace_zoom', String(currentZoom)); } catch (e) {}
+  }
+  const els = document.querySelectorAll('.zoom-val-text');
+  els.forEach(el => { el.textContent = Math.round(currentZoom * 100) + '%'; });
+}
+
+function zoomIn() {
+  applyZoom(currentZoom + 0.05);
+}
+
+function zoomOut() {
+  applyZoom(currentZoom - 0.05);
+}
+
+function zoomReset() {
+  applyZoom(0.75);
+}
+
+function zoomControlHtml() {
+  const pct = Math.round(currentZoom * 100) + '%';
+  return `
+    <div class='zoom-widget' aria-label='Pengatur Skala Layar'>
+      <span class='zoom-val-text'>${pct}</span>
+      <button type='button' class='zoom-btn' onclick='zoomOut()' title='Perkecil (-5%)' aria-label='Perkecil'>−</button>
+      <button type='button' class='zoom-btn' onclick='zoomIn()' title='Perbesar (+5%)' aria-label='Perbesar'>+</button>
+      <button type='button' class='zoom-btn-reset' onclick='zoomReset()' title='Reset ke 75%'>Reset</button>
+    </div>
+  `;
+}
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth >= 1025) {
+    document.documentElement.style.zoom = currentZoom;
+  } else {
+    document.documentElement.style.zoom = '';
+  }
+});
+if (window.innerWidth >= 1025) {
+  document.documentElement.style.zoom = currentZoom;
+}
+
 // Helpers
 const head = (r = '') =>
-  `<header><div class="logo d"><i>${ic('logo', 26)}</i>EduRace</div><span class="tag">Kuis 2 Tim · Interactive Flat Panel (IFP)</span><div style="display:flex;gap:8px;align-items:center">${r}</div></header>`;
+  `<header><div class="logo d"><i>${ic('logo', 26)}</i>QuizRace</div><span class="tag">Kuis 2 Tim · Interactive Flat Panel (IFP)</span><div style="display:flex;gap:8px;align-items:center">${zoomControlHtml()}${r}</div></header>`;
 
 const pkg = () => BANK.find(p => p.id === S.pkg) || null;
 const Q = () => (pkg() ? pkg().qs : []);
@@ -405,11 +467,11 @@ function heroView(T) {
 function tutorialModal() {
   if (!S.tutOpen) return '';
   return `<div class="modal" onclick="if(event.target===this)toggleTut(false)">
-    <div class="tut-card" role="dialog" aria-modal="true" aria-label="Tutorial Penggunaan EduRace">
+    <div class="tut-card" role="dialog" aria-modal="true" aria-label="Tutorial Penggunaan QuizRace">
       <div class="tut-head">
         <div style="display:flex;align-items:center;gap:10px">
           ${ic('help', 26)}
-          <h3 style="font-size:1.25rem;color:#fff">Tahapan Penggunaan EduRace di Layar IFP</h3>
+          <h3 style="font-size:1.25rem;color:#fff">Tahapan Penggunaan QuizRace di Layar IFP</h3>
         </div>
         <button type="button" class="btn w" style="padding:5px 12px;font-size:0.8rem" onclick="toggleTut(false)">✕ Tutup</button>
       </div>
@@ -1371,6 +1433,7 @@ function game() {
       </div>
       <div class='timer d ${S.left <= 5 ? 'low' : ''}' id='tm'>${S.left}</div>
       <div style='text-align:right;display:flex;gap:8px;align-items:center;justify-content:flex-end'>
+        ${zoomControlHtml()}
         <button class='btn w' onclick='toggleBgm()' aria-label='Musik Latar' title='Musik Latar (Backsound)'>${S.bgmOff || S.mute ? '🔇 Musik' : '🎵 Musik'}</button>
         <button class='btn w' onclick='toggleMute()' aria-label='Suara' title='Efek Suara &amp; Musik'>${ic(S.mute ? 'mute' : 'sound', 18)}</button>
         ${fullBtnHtml(true)}

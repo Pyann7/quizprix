@@ -1,5 +1,5 @@
 /**
- * EduRace – Animated Race Tracks & SVG Visuals (Redesigned & Precision Bounded)
+ * QuizRace – Animated Race Tracks & SVG Visuals (Redesigned & Precision Bounded)
  * Themes: rocket, car, tug, cook, plant, climb, swim, train
  */
 

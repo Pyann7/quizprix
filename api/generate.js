@@ -1,5 +1,5 @@
 /**
- * EduRace – Serverless AI Question Generator (Vercel Function)
+ * QuizRace – Serverless AI Question Generator (Vercel Function)
  *
  * API key TIDAK pernah dikirim ke browser. Simpan di Vercel → Settings → Environment Variables:
  *   GEMINI_API_KEY  (Google AI Studio)

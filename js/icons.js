@@ -1,5 +1,5 @@
 /**
- * EduRace – SVG Icons System
+ * QuizRace – SVG Icons System
  */
 
 const P = (d, f = 'none') => `<path d='${d}' fill='${f}'/>`;

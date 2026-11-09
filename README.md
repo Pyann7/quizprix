@@ -1,4 +1,4 @@
-# QuizPrix – Kelas Jadi Lomba 🏁
+# QuizRace – Kelas Jadi Lomba 🏁
 
 Kuis interaktif 2 tim untuk **IFP (Interactive Flat Panel)** dan proyektor kelas, untuk **semua jenjang sekolah** (SD/MI, SMP/MTs, SMA/SMK/MA). Frontend web murni (HTML, CSS, JS Vanilla) + satu fungsi serverless di **Vercel** untuk membuat soal dengan AI.
 

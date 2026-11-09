@@ -1,8 +1,8 @@
 {
-  "name": "quizprix",
+  "name": "quizrace",
   "version": "1.0.0",
   "private": true,
-  "description": "QuizPrix – kuis interaktif 2 tim untuk Interactive Flat Panel dengan generator soal AI ganda",
+  "description": "QuizRace – kuis interaktif 2 tim untuk Interactive Flat Panel dengan generator soal AI ganda",
   "engines": { "node": ">=18" }
 }
 

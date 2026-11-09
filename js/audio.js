@@ -1,5 +1,5 @@
 /**
- * EduRace – Web Audio Engine (Synthesized Arcade BGM & Interactive SFX)
+ * QuizRace – Web Audio Engine (Synthesized Arcade BGM & Interactive SFX)
  * Tanpa file MP3 eksternal – 100% berjalan di browser & hemat kuota!
  */
 

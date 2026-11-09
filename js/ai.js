@@ -1,5 +1,5 @@
 /**
- * EduRace – AI Question Generator (sisi browser)
+ * QuizRace – AI Question Generator (sisi browser)
  * Pembuatan soal dilakukan di server (/api/generate) sehingga API key tidak pernah ada di browser.
  * Server memakai Google AI Studio dan Groq Cloud secara bergantian (failover otomatis).
  */
