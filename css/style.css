@@ -284,7 +284,7 @@ header {
   gap: 16px;
   align-items: center;
   justify-content: center;
-  margin-bottom: 22px;
+  margin-bottom: 0;
 }
 
 .btn.cta-main {
@@ -3224,7 +3224,7 @@ header {
 .hero-cta {
   gap: var(--sp-4) !important;
   justify-content: center !important;
-  margin-bottom: var(--sp-5) !important;
+  margin-bottom: 0 !important;
 }
 
 .btn.cta-main {
