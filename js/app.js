@@ -457,30 +457,28 @@ function landing() {
   ).join('');
 
   return head(fullBtnHtml()) +
-    `<main class="hero-page hero-centered">
-      <section class="hero-header-center">
-        <div class="hero-badge-wrap">
-          <span class="tag hero-badge" style="background:var(--y)">${ic('cap', 16)} Semua Jenjang Sekolah · SD, SMP &amp; SMA/SMK</span>
-        </div>
-        <h1 class="hero-title-center">Kelas jadi <span>lomba.</span></h1>
-        <p class="hero-lead-center">
-          Kuis interaktif 2 tim khusus layar sentuh <b>Interactive Flat Panel (IFP)</b> dan proyektor kelas. Dua siswa maju dan berduel langsung di sisi kiri &amp; kanan layar!
-        </p>
+    `<main class="hero-page">
+      <div class="hero">
+        <section class="hero-center">
+          <div class="hero-badge-wrap">
+            <span class="tag" style="background:var(--y)">${ic('cap', 16)} Semua Jenjang Sekolah · SD, SMP &amp; SMA/SMK</span>
+          </div>
+          <h1 class="hero-title">Kelas jadi <span>lomba.</span></h1>
+          <p class="hero-lead">Kuis interaktif 2 tim khusus layar sentuh <b>Interactive Flat Panel (IFP)</b> dan proyektor kelas. Dua siswa maju dan berduel langsung di sisi kiri &amp; kanan layar!</p>
 
-        <div class="hero-cta-center">
-          <button class="btn cta-main" onclick="startFlow()">Mulai Atur Lomba</button>
-          <button type="button" class="tut-trigger" onclick="toggleTut(true)">${ic('help', 22)} Lihat Tutorial Penggunaan</button>
-        </div>
+          <div class="hero-cta">
+            <button class="btn cta-main" onclick="startFlow()">Mulai Atur Lomba</button>
+            <button type="button" class="tut-trigger" onclick="toggleTut(true)">${ic('help', 22)} Lihat Tutorial Penggunaan</button>
+          </div>
 
-        <div class="hero-pills-row">
-          <span class="hero-pill-item"><i>✓</i> <b>3 Bentuk Soal Interaktif:</b> Pilihan Ganda, Fill in the Blanks &amp; Drag-and-Drop</span>
-          <span class="hero-pill-item"><i>✓</i> <b>Soal Dibuat AI</b> untuk topik &amp; jenjang apa pun, siap seketika</span>
-          <span class="hero-pill-item"><i>✓</i> <b>Multi-Touch Independen:</b> Kedua tim menjawab serempak tanpa gangguan</span>
-        </div>
-      </section>
+          <ul class="hero-feats">
+            <li><i>✓</i><span><b>3 Bentuk Soal:</b> Pilihan Ganda, Fill in the Blanks &amp; Drag-and-Drop</span></li>
+            <li><i>✓</i><span><b>Soal Dibuat AI</b> untuk topik &amp; jenjang apa pun</span></li>
+            <li><i>✓</i><span><b>Multi-Touch Independen:</b> Duel 2 tim serempak</span></li>
+          </ul>
+        </section>
 
-      <section class="hero-showcase-center">
-        <div class="pv">
+        <section class="pv">
           <div class="pv-topbar">
             <div class="pv-title">
               <span class="pv-dots"><i style="background:#EF4444"></i><i style="background:#FFD23F"></i><i style="background:#00E36B"></i></span>
@@ -489,8 +487,8 @@ function landing() {
             <div class="pv-tabs" style="margin:0" aria-label="Pilih model preview">${pvBtns}</div>
           </div>
           <div class="pv-canvas" id="heroBox">${heroView(2.2)}</div>
-        </div>
-      </section>
+        </section>
+      </div>
     </main>` + tutorialModal();
 }
 
