@@ -68,8 +68,8 @@ const S = {
   left: 20,
   win: null,
   mode: 'race',
-  qtype: 'mix',
-  pvType: 'auto',
+  qtype: 'mcq',
+  pvType: 'mcq',
   tutOpen: false,
   blankIn: [[], []],
   blankCur: [0, 0],
@@ -386,10 +386,17 @@ function heroView(T) {
   };
 
   return `<div class='pvh'>
-      <span class='sc d b' style='font-size:1.25rem;padding:4px 12px'>${sh[0]}</span>
-      <span class='tag' style='background:#fff'>Arena: ${THEMES[th][1]}</span>
-      <div class='timer d' style='font-size:1.5rem;min-width:64px'>${tm}</div>
-      <span class='sc d r' style='font-size:1.25rem;padding:4px 12px'>${sh[1]}</span>
+      <div class='pvh-left'>
+        <span class='sc d b' style='font-size:1.15rem;padding:4px 12px;height:36px;display:inline-flex;align-items:center;border-radius:6px'>${sh[0]}</span>
+        <span class='tag' style='background:#fff;height:36px;display:inline-flex;align-items:center;margin:0'>Arena: ${THEMES[th][1]}</span>
+      </div>
+      <div class='pvh-mid'>
+        <div class='timer d' style='font-size:1.35rem;width:44px;height:44px;line-height:44px;margin:0;display:grid;place-items:center;border:2.5px solid #000;box-shadow:2px 2px 0 #000'>${tm}</div>
+      </div>
+      <div class='pvh-right'>
+        <span class='tag' style='background:var(--y);height:36px;display:inline-flex;align-items:center;margin:0'>🏁 Balapan 2 Tim</span>
+        <span class='sc d r' style='font-size:1.15rem;padding:4px 12px;height:36px;display:inline-flex;align-items:center;border-radius:6px'>${sh[1]}</span>
+      </div>
     </div>
     <div class='pvc'>
       ${pn(0)}
@@ -448,10 +455,10 @@ function tutorialModal() {
 
 function landing() {
   const pvBtns = [
-    ['auto', '🔄 Otomatis'],
+    ['mcq', '📝 Pilihan Ganda'],
     ['blank', '✏️ Fill Blanks'],
     ['drag', '🖐️ Drag & Drop'],
-    ['mcq', '📝 Pilihan Ganda']
+    ['auto', '🔄 Rotasi Otomatis']
   ].map(([k, lbl]) =>
     `<button class='pv-tab ${S.pvType === k ? 'on' : ''}' data-pv='${k}' onclick='setPvType("${k}")'>${lbl}</button>`
   ).join('');
