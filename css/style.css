@@ -4436,6 +4436,175 @@ textarea {
 }
 
 /* ==========================================================================
+   CENTERED HERO / LANDING PAGE LAYOUT (Inspired by modern centered SaaS hero)
+   ========================================================================== */
+.hero-page.hero-centered {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  text-align: center !important;
+  max-width: 1240px !important;
+  margin: 0 auto !important;
+  padding: clamp(24px, 4vh, 48px) clamp(16px, 3vw, 40px) clamp(36px, 6vh, 64px) !important;
+  gap: clamp(20px, 3vh, 32px) !important;
+  width: 100% !important;
+}
+
+.hero-header-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 860px;
+  width: 100%;
+}
+
+.hero-badge-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.hero-badge {
+  font-size: 0.9rem;
+  font-weight: 800;
+  padding: 5px 16px;
+  border-radius: 999px;
+  box-shadow: 2px 2px 0 #000;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-title-center {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(2.8rem, 5.6vw, 4.8rem);
+  line-height: 1.08;
+  color: var(--ink);
+  margin: 14px 0 16px;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.hero-title-center span {
+  display: inline-block;
+  background: var(--y);
+  border: 3px solid #000;
+  padding: 2px 18px;
+  transform: rotate(-1.5deg);
+  box-shadow: 5px 5px 0 #000;
+  margin-left: 6px;
+  border-radius: 6px;
+}
+
+.hero-lead-center {
+  font-size: clamp(1.08rem, 1.4vw, 1.25rem);
+  line-height: 1.6;
+  color: #374151;
+  max-width: 720px;
+  margin: 0 auto 24px;
+  text-align: center;
+}
+
+.hero-cta-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.hero-cta-center .cta-main {
+  font-size: 1.2rem;
+  padding: 16px 34px;
+  border-width: 3px;
+  box-shadow: 5px 5px 0 #000;
+}
+
+.hero-cta-center .tut-trigger {
+  font-size: 0.98rem;
+  padding: 13px 20px;
+  background: #ffffff;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  box-shadow: 3px 3px 0 var(--ink);
+  color: var(--ink);
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.hero-cta-center .tut-trigger:hover {
+  background: #FAF6EE;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.hero-pills-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hero-pill-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 16px;
+  font-size: 0.88rem;
+  color: #374151;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.hero-pill-item i {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  background: var(--g);
+  border: 1.5px solid #000;
+  border-radius: 50%;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 0.65rem;
+  color: #000;
+}
+
+.hero-showcase-center {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.hero-showcase-center .pv {
+  width: 100%;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12), 6px 6px 0 #000;
+  border: 3px solid #000;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.hero-showcase-center .pv-topbar {
+  padding: 12px 18px;
+}
+
+.hero-showcase-center .pv-canvas {
+  min-height: 380px;
+  padding: 18px 18px 0;
+}
+
+/* ==========================================================================
    FULL MULTI-DEVICE RESPONSIVE SYSTEM (Mobile · Tablet · Desktop · Large IFP)
    ========================================================================== */
 
@@ -4659,19 +4828,39 @@ textarea {
     padding: 14px !important;
   }
 
-  .hero h1 {
+  .hero h1,
+  .hero-title-center {
     font-size: clamp(2rem, 8.5vw, 2.6rem) !important;
   }
 
-  .hero-cta {
+  .hero-cta,
+  .hero-cta-center {
     flex-direction: column;
     align-items: stretch;
+    width: 100%;
+    gap: 12px;
   }
 
   .hero-cta .btn,
-  .hero-cta .tut-trigger {
+  .hero-cta .tut-trigger,
+  .hero-cta-center .cta-main,
+  .hero-cta-center .tut-trigger {
     width: 100%;
     justify-content: center;
+  }
+
+  .hero-pills-row {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .hero-pill-item {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+    text-align: left;
+    justify-content: flex-start;
   }
 
   .pv-topbar {
